@@ -2,7 +2,7 @@
 User Interface
  */
 
-package Mo;
+package mo;
 
 import java.awt.Desktop;
 import java.io.File;

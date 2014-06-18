@@ -6,7 +6,10 @@
 
 package tests;
 
+import mo.MusicFile;
+import org.testng.Assert;
 import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 /**
  *
@@ -14,9 +17,15 @@ import static org.testng.Assert.*;
  */
 public class musicFileTest {
     
+    MusicFile mf = new MusicFile();
     public musicFileTest() {
+    
     }
-
+    @Test
+    public void musicFileNameTest() {
+        mf.setName("test");
+        Assert.assertEquals(mf.getName(), "test");
+    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
