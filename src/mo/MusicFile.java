@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
@@ -22,9 +23,13 @@ import org.jaudiotagger.tag.Tag;
 public class MusicFile {
     private Tag tag;
     private Path path;
+    private AudioHeader header;
     public MusicFile(AudioFile af) {
-        //get the tag
+        tag = af.getTag();//get the tag
+        header = af.getAudioHeader();
+        path = af.getFile().toPath();
     }
+
     
     public void setArtist(String artist) {
         try {
