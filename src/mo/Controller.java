@@ -1,3 +1,5 @@
+package mo;
+
 /***************************************************
 * Class Controller
 *    Handles User input
@@ -10,7 +12,6 @@
 ****************************************************/
 public class Controller implements Runnable {
 
-  View view = View.getInstance();
   Model model = Model.getInstance();
   
   /**
