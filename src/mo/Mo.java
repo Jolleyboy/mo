@@ -11,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -41,7 +40,7 @@ public class Mo extends Application {
         this.table = new TableView();
     }
 
-	@Override
+    @Override
     public void start(Stage stage) {
 
     	stage.setTitle("Music Organizer v1.0");
@@ -49,37 +48,40 @@ public class Mo extends Application {
          
         MenuBar menuBar = new MenuBar();
  
-        // --- Menu File
+        // --- File Menu
         Menu menuFile = new Menu("File");
-        MenuItem open = new MenuItem("Music Scan");
+        
+        MenuItem open = new MenuItem("Music Scan"); // -- Music Scan Submenu
         final FileChooser fileChooser = new FileChooser();
         open.setOnAction((ActionEvent t) -> {
-            final DirectoryChooser directoryChooser =
-                new DirectoryChooser();
-            final File selectedDirectory =
-                    directoryChooser.showDialog(stage);
+            final DirectoryChooser directoryChooser = new DirectoryChooser();
+            final File selectedDirectory = directoryChooser.showDialog(stage);
             if (selectedDirectory != null) {
                 System.out.println(selectedDirectory);
             }
-		});
+	});
 
- 		menuFile.getItems().addAll(open);
-        MenuItem exit = new MenuItem("Exit");
+        MenuItem exit = new MenuItem("Exit"); // -- Exit Submenu
         exit.setOnAction((ActionEvent t) -> {
-    		System.exit(0);
-		});
+            System.exit(0);
+	});
+        // ---
 
- 		menuFile.getItems().addAll(exit);
+ 	menuFile.getItems().addAll(open, exit);
  
-        // --- Menu Edit
+        // --- Edit Menu
         Menu menuEdit = new Menu("Edit");
+        MenuItem edits = new MenuItem("Edits"); // -- Edits Submenu
+        menuEdit.getItems().addAll(edits);
+        // ---
  
-        // --- Menu View
+        // --- View Menu
         Menu menuView = new Menu("View");
-        MenuItem changeview = new MenuItem("Change view");
+        MenuItem changeview = new MenuItem("Change view"); // -- Change View Submenu
 
         menuView.getItems().addAll(changeview);
- 
+        // ---
+        
         menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
         
         table.setEditable(true);
@@ -89,8 +91,9 @@ public class Mo extends Application {
         TableColumn albumCol = new TableColumn("Album");
         TableColumn genreCol = new TableColumn("Genre");
         TableColumn timeCol = new TableColumn("Time");
+        TableColumn fileType = new TableColumn("File Type");
         
-        table.getColumns().addAll(nameCol, artistCol, albumCol, genreCol, timeCol);
+        table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol, fileType);
         final VBox tbl = new VBox();
         tbl.setSpacing(5);
         tbl.setPadding(new Insets(10, 10, 20, 10));
@@ -103,11 +106,11 @@ public class Mo extends Application {
         btns.setPadding(new Insets(10, 10, 10, 10));
         Button btn1 = new Button();
         
-        btn1.setText("Button 1");
+        btn1.setText("Music Scan");
         btnbox.getChildren().add(btn1);
         
         Button btn2 = new Button();
-        btn2.setText("Button 2");
+        btn2.setText("Apply Changes");
         btnbox.getChildren().add(btn2);
         
         btns.getChildren().addAll(btnbox);
