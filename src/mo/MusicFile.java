@@ -45,4 +45,45 @@ public class MusicFile {
         return tag.getFirst(FieldKey.ARTIST);
     }
     
+    public String getTitle(){
+        return tag.getFirst(FieldKey.TITLE);
+    }
+    
+    public void setTitle(String title){
+        try {
+            tag.setField(FieldKey.TITLE, title);
+        } catch (KeyNotFoundException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FieldDataInvalidException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public String getGenre(){
+        return tag.getFirst(FieldKey.GENRE);
+    }
+    
+    public void setGenre(String genre) {
+        try {
+            tag.setField(FieldKey.GENRE, genre);
+        } catch (KeyNotFoundException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FieldDataInvalidException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public String getAlbum(){
+        return tag.getFirst(FieldKey.ALBUM);
+    }
+    
+    public void setAlbum(String album){
+        try {
+            tag.setField(FieldKey.ALBUM, album);
+        } catch (KeyNotFoundException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FieldDataInvalidException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
