@@ -1,3 +1,5 @@
+package mo;
+
 /***************************************************
 * Class Controller
 *    Handles User input
