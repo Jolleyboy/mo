@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -23,6 +24,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -49,12 +51,15 @@ public class Mo extends Application {
  
         // --- Menu File
         Menu menuFile = new Menu("File");
-        MenuItem open = new MenuItem("Open File");
+        MenuItem open = new MenuItem("Music Scan");
         final FileChooser fileChooser = new FileChooser();
         open.setOnAction((ActionEvent t) -> {
-        	File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
-               openFile(file);
+            final DirectoryChooser directoryChooser =
+                new DirectoryChooser();
+            final File selectedDirectory =
+                    directoryChooser.showDialog(stage);
+            if (selectedDirectory != null) {
+                System.out.println(selectedDirectory);
             }
 		});
 
