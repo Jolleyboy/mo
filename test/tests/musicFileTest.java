@@ -21,6 +21,7 @@ public class musicFileTest {
     public musicFileTest() {
     
     }
+    
     @Test
     public void musicFileNameTest() {
         mf.setName("test");
