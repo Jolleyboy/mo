@@ -12,7 +12,6 @@ package mo;
 ****************************************************/
 public class Controller implements Runnable {
 
-  View view = View.getInstance();
   Model model = Model.getInstance();
   
   /**

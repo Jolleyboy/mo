@@ -36,15 +36,7 @@ public class musicFileTest {
         f = new File(filename);
         try {
             af = AudioFileIO.read(f);
-        } catch (CannotReadException ex) {
-            Logger.getLogger(musicFileTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(musicFileTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TagException ex) {
-            Logger.getLogger(musicFileTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ReadOnlyFileException ex) {
-            Logger.getLogger(musicFileTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidAudioFrameException ex) {
+        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             Logger.getLogger(musicFileTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         mf = new MusicFile(af);
