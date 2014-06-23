@@ -11,13 +11,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
@@ -100,18 +110,60 @@ public class Mo extends Application {
         tbl.getChildren().addAll(table);
         
         final VBox btns = new VBox();
-        HBox btnbox = new HBox(20);
+        final HBox btnbox = new HBox(20);
         VBox.setVgrow(btnbox, Priority.ALWAYS);
         btns.setSpacing(10);
         btns.setPadding(new Insets(10, 10, 10, 10));
-        Button btn1 = new Button();
         
+        Button btn1 = new Button();
         btn1.setText("Music Scan");
         btnbox.getChildren().add(btn1);
         
         Button btn2 = new Button();
         btn2.setText("Apply Changes");
         btnbox.getChildren().add(btn2);
+        
+        Button btn3 = new Button();
+        btn3.setText("TEST");
+        btn3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                final Float[] values = new Float[] {-1.0f};
+                final Label [] labels = new Label[values.length];
+                final ProgressBar[] pbs = new ProgressBar[values.length];
+                final ProgressIndicator[] pins = new ProgressIndicator[values.length];
+                final HBox hbs [] = new HBox [values.length];
+                
+                Stage stage2 = new Stage();
+                stage2.setTitle("Music Scan");
+                Scene scene2 = new Scene(new VBox(), 550, 250);
+                stage2.setScene(scene2);
+                stage2.show(); 
+                
+                for (int i = 0; i < values.length; i++) {
+                    final Label label = labels[i] = new Label();
+                    label.setText("Scanning  ");
+ 
+                    final ProgressBar pb = pbs[i] = new ProgressBar();
+                    pb.setProgress(values[i]);
+ 
+                    final ProgressIndicator pin = pins[i] = new ProgressIndicator();
+                    pin.setProgress(values[i]);
+                    final HBox hb = hbs[i] = new HBox();
+                    hb.setSpacing(5);
+                    hb.setPadding(new Insets(60, 10, 10, 10));
+                    hb.setAlignment(Pos.CENTER);
+                    hb.getChildren().addAll(label, pb, pin);
+                }
+                
+                final VBox vb = new VBox();
+                vb.setSpacing(5);
+                vb.getChildren().addAll(hbs);
+                scene2.setRoot(vb);
+                stage2.show();
+            }
+        });
+        btnbox.getChildren().add(btn3);
         
         btns.getChildren().addAll(btnbox);
         
@@ -121,17 +173,6 @@ public class Mo extends Application {
         
         stage.setScene(scene);
         stage.show();
-    }
-
-    private void openFile(File file) {
-        try {
-            desktop.open(file);
-        } catch (IOException ex) {
-            Logger.getLogger(
-                Mo.class.getName()).log(
-                    Level.SEVERE, null, ex
-                );
-        }
     }
 
     public static void main(String[] args) {
