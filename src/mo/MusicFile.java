@@ -6,15 +6,22 @@
 
 package mo;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 
 /**
  *  Class MusicFile
@@ -29,7 +36,19 @@ public class MusicFile {
         header = af.getAudioHeader();
         path = af.getFile().toPath();
     }
-
+    
+    public MusicFile(File file) {
+        AudioFile af;
+        try {
+            af = AudioFileIO.read(file);
+            tag = af.getTag();//get the tag
+            header = af.getAudioHeader();
+            path = af.getFile().toPath();
+        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
     /**
      * Sets the artist for this music file's tag
      * @param artist 
