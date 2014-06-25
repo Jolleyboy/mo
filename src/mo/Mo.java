@@ -36,7 +36,7 @@ import javafx.stage.Stage;
  * @author Matt
  */
 public class Mo extends Application {
-    
+
 //<<<<<<< HEAD
     private TableView<ExMusic> table = new TableView<ExMusic>();
     
@@ -47,6 +47,7 @@ public class Mo extends Application {
                 new ExMusic("name3","artist3","album3","genre3","time3")
         );
 //>>>>>>> origin/master
+
 
     @Override
     public void start(Stage stage) {
