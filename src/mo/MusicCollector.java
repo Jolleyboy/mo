@@ -45,7 +45,7 @@ public class MusicCollector {
      * directory.
      * @param path 
      */
-    public void searchFiles(String path) {
+    private void searchFiles(String path) {
         String files;
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
@@ -68,7 +68,7 @@ public class MusicCollector {
      * that is loaded.
      * @param newFile 
      */
-    public void addToList(MusicFile newFile) {
+    private void addToList(MusicFile newFile) {
          List<MusicFile> mfList = model.getList();
          mfList.add(newFile);
          model.setList(mfList);
