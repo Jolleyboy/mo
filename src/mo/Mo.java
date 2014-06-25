@@ -37,7 +37,7 @@ public class Mo extends Application {
     
     private final TableView table;
     private final Desktop desktop = Desktop.getDesktop();
-
+  
     public Mo() {
         this.table = new TableView();
     }

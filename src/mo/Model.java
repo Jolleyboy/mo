@@ -1,5 +1,6 @@
 package mo;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +15,22 @@ import mo.MusicFile;
 public class Model {
 
   private static Model singleton = new Model();
-
+  private List<MusicFile> listMF;
+  private File selectedDirectory;
   private Model() {
     //to prevent making seperate instances
   }
 
+ 
   public static Model getInstance() {
     return singleton;
   }
-  public List<MusicFile> findFiles(Path directory){
-    List<MusicFile> listMF; 
-    listMF = new ArrayList<MusicFile>();
-    //check every file in every directory under this path
-      
-      //if the file is an mp3 or .ogg or .flac or any other music file
-        //make a new File
-        //make a new AudioFile(newFile)
-        //make a new MusicFile(audioFile)
-        //add the musicFile to the list
-   return listMF;
+  
+  public List<MusicFile> getList() {
+      return listMF;
+  }
+  
+  public void setList(List<MusicFile> listMF) {
+      this.listMF = listMF;
   }
 }

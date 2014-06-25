@@ -26,21 +26,9 @@ import org.testng.annotations.Test;
  * @author Joshua
  */
 public class musicFileTest {
-    String filename;
-    File f;
-    AudioFile af;
     MusicFile mf;
     public musicFileTest() {
-    
-        filename = "C:\\Users\\Joshua\\Music\\seattle.mp3";
-        f = new File(filename);
-        try {
-            af = AudioFileIO.read(f);
-        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
-            Logger.getLogger(musicFileTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        mf = new MusicFile(af);
-    
+        mf = new MusicFile("C:\\Users\\Joshua\\Music\\seattle.mp3");
     }
     
     @Test

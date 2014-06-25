@@ -31,13 +31,40 @@ public class MusicFile {
     private Tag tag;                //The ID3 tag 
     private Path path;              //The Path to the music file
     private AudioHeader header;     //The header of the music file
+    
+    /**
+     * Constructor that takes an AudioFile
+     * @param af 
+     */
     public MusicFile(AudioFile af) {
         tag = af.getTag();//get the tag
         header = af.getAudioHeader();
         path = af.getFile().toPath();
     }
     
+    /**
+     * Constructor that takes a file
+     * @param file 
+     */
     public MusicFile(File file) {
+        AudioFile af;
+        try {
+            af = AudioFileIO.read(file);
+            tag = af.getTag();//get the tag
+            header = af.getAudioHeader();
+            path = af.getFile().toPath();
+        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    
+    /**
+     * Constructor that takes a filename
+     * @param filename 
+     */
+    public MusicFile(String filename) {
+        File file = new File(filename);
         AudioFile af;
         try {
             af = AudioFileIO.read(file);
