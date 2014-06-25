@@ -31,7 +31,7 @@ public class MusicFile {
     private Tag tag;                //The ID3 tag 
     private Path path;              //The Path to the music file
     private AudioHeader header;     //The header of the music file
-    
+    private int id;
     /**
      * Constructor that takes an AudioFile
      * @param af 
@@ -88,6 +88,9 @@ public class MusicFile {
         }
     }
     
+    public String getPath() {
+        return path.toString();
+    }
     /**
      * Returns the artist from the tag as a string
      * @return 
