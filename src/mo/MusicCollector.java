@@ -1,12 +1,13 @@
 package mo;
 
 import java.io.File;
+import java.util.List;
 
 
 public class MusicCollector {
-    
-    public String path;// = "C:\\Users\\";//\\Rafael\\Music\\stcb\\";
-    
+    Model model = Model.getInstance();
+    public String path;// = "C:\\Users\\Rafael\\Music\\stcb\\";
+
     /**
      * This method should be called to set the directory from which the
      * user desires to obtain files.
@@ -17,7 +18,7 @@ public class MusicCollector {
     }
     
     /**
-     * This method will go down through the subfiles in a recursive
+     * This method will go down through the sub-folders in a recursive
      * manner and then calling searchFiles to obtain the files.
      * @param path 
      */
@@ -54,10 +55,23 @@ public class MusicCollector {
                 files = listOfFile.getName();
                 if (files.endsWith(".mp3") || files.endsWith(".wav") || files.endsWith(".flac") || files.endsWith(".m4a") || files.endsWith(".ogg") || files.endsWith(".aac")) {
                     //Change files into audiofiles and add them into a list
+                    MusicFile mf = new MusicFile(files);
+                    addToList(mf);
                     System.out.println(files);
                 }
             }
         }
+    }
+    
+    /**
+     * This method will append to the MusicList each new MusicFile
+     * that is loaded.
+     * @param newFile 
+     */
+    public void addToList(MusicFile newFile) {
+         List<MusicFile> mfList = model.getList();
+         mfList.add(newFile);
+         model.setList(mfList);
     }
     
 }
