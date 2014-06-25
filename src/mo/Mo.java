@@ -8,6 +8,11 @@ import java.awt.Desktop;
 import java.io.File;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -22,6 +27,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -35,29 +41,32 @@ import javafx.stage.Stage;
  */
 public class Mo extends Application {
     
-    private final TableView table;
-    private final Desktop desktop = Desktop.getDesktop();
-
-    public Mo() {
-        this.table = new TableView();
-    }
+    private TableView<ExMusic> table = new TableView<ExMusic>();
+    
+    private ObservableList<ExMusic> data =
+        FXCollections.observableArrayList(
+                new ExMusic("name1","artist1","album1","genre1","time1"),
+                new ExMusic("name2","artist2","album2","genre2","time2"),
+                new ExMusic("name3","artist3","album3","genre3","time3")
+        );
 
     @Override
     public void start(Stage stage) {
 
-    	stage.setTitle("Music Organizer v1.0");
+    	stage.setTitle("Music Organizer v1.1");
         Scene scene = new Scene(new VBox(), 700, 550);
          
+        table.setEditable(true);
+        
         MenuBar menuBar = new MenuBar();
  
         // --- File Menu
         Menu menuFile = new Menu("File");
         
         MenuItem open = new MenuItem("Music Scan"); // -- Music Scan Submenu
-        final FileChooser fileChooser = new FileChooser();
         open.setOnAction((ActionEvent t) -> {
             final DirectoryChooser directoryChooser = new DirectoryChooser();
-            final File selectedDirectory = directoryChooser.showDialog(stage);
+            File selectedDirectory = directoryChooser.showDialog(stage);
             if (selectedDirectory != null) {
                 System.out.println(selectedDirectory);
             }
@@ -86,16 +95,19 @@ public class Mo extends Application {
         
         menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
         
-        table.setEditable(true);
-        
         TableColumn nameCol = new TableColumn("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("name"));
         TableColumn artistCol = new TableColumn("Artist");
+        artistCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("artist"));
         TableColumn albumCol = new TableColumn("Album");
+        albumCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("album"));
         TableColumn genreCol = new TableColumn("Genre");
+        genreCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("genre"));
         TableColumn timeCol = new TableColumn("Time");
-        TableColumn fileType = new TableColumn("File Type");
+        timeCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("time"));
         
-        table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol, fileType);
+        table.setItems(data);
+        table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
         final VBox tbl = new VBox();
         tbl.setSpacing(5);
         tbl.setPadding(new Insets(10, 10, 20, 10));
@@ -108,15 +120,19 @@ public class Mo extends Application {
         btns.setPadding(new Insets(10, 10, 10, 10));
         
         Button btn1 = new Button();
-        btn1.setText("Music Scan");
+        btn1.setText("Null");
         btnbox.getChildren().add(btn1);
         
         Button btn2 = new Button();
-        btn2.setText("Apply Changes");
+        btn2.setText("Load Examples");
+        btn2.setOnAction((ActionEvent t) -> {
+            
+	});
+        
         btnbox.getChildren().add(btn2);
         
         Button btn3 = new Button();
-        btn3.setText("TEST");
+        btn3.setText("Music Scan");
         btn3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -129,6 +145,8 @@ public class Mo extends Application {
                 Stage stage2 = new Stage();
                 stage2.setTitle("Music Scan");
                 Scene scene2 = new Scene(new VBox(), 550, 250);
+                
+                Button btn4 = new Button();
                 stage2.setScene(scene2);
                 stage2.show(); 
                 
@@ -149,10 +167,20 @@ public class Mo extends Application {
                 }
                 
                 final VBox vb = new VBox();
+                final HBox btnbox2 = new HBox(20);
                 vb.setSpacing(5);
-                vb.getChildren().addAll(hbs);
-                scene2.setRoot(vb);
-                stage2.show();
+                btn4.setText("Cancel");
+                btn4.setOnAction((ActionEvent t) -> {
+                    
+                });
+                
+            vb.getChildren().addAll(hbs);
+            btnbox2.getChildren().add(btn4);
+            btnbox2.setAlignment(Pos.CENTER);
+            btnbox2.setPadding(new Insets(60, 10, 10, 10));
+            vb.getChildren().addAll(btnbox2);
+            scene2.setRoot(vb);
+            stage2.show();
             }
         });
         btnbox.getChildren().add(btn3);
@@ -171,4 +199,56 @@ public class Mo extends Application {
         launch(args);
     }
     
+    public static class ExMusic {
+ 
+        private String name;
+        private String artist;
+        private String album;
+        private String genre;
+        private String time;
+ 
+        private ExMusic(String name, String artist, String album, String genre, String time) {
+            this.name = new String(name);
+            this.artist = new String(artist);
+            this.album = new String(album);
+            this.genre = new String(genre);
+            this.time = new String(time);
+        }
+        //---------
+        public String getName() {
+            return name;
+        }
+        public void setName(String name1) {
+            this.name = name1;
+        }
+        //---------
+        public String getArtist() {
+            return artist;
+        }
+        public void setArtist(String artist1) {
+            this.artist = artist1;
+        }
+        //---------
+        public String getAlbum() {
+            return album;
+        }
+        public void setAlbum(String album1) {
+            this.album = album1;
+        }
+        //---------
+        public String getGenre() {
+            return genre;
+        }
+        public void setGenre(String genre1) {
+            this.genre = genre1;
+        }
+        //---------
+        public String getTime() {
+            return time;
+        }
+        public void setTime(String time1) {
+            this.time = time1;
+        }
+        //---------
+    }
 }
