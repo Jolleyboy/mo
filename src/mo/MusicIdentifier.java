@@ -26,6 +26,7 @@ public class MusicIdentifier {
     public void identifyNewSongs() {
 
     }
+<<<<<<< HEAD
 
     public String fingerprint(MusicFile mf) {
         String line = "";
@@ -53,6 +54,5 @@ public class MusicIdentifier {
     }
 
     private void identify() {
-        
     }
 }
