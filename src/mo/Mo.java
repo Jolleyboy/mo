@@ -8,9 +8,6 @@ import java.awt.Desktop;
 import java.io.File;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,7 +29,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -41,6 +37,7 @@ import javafx.stage.Stage;
  */
 public class Mo extends Application {
     
+//<<<<<<< HEAD
     private TableView<ExMusic> table = new TableView<ExMusic>();
     
     private ObservableList<ExMusic> data =
@@ -49,6 +46,7 @@ public class Mo extends Application {
                 new ExMusic("name2","artist2","album2","genre2","time2"),
                 new ExMusic("name3","artist3","album3","genre3","time3")
         );
+//>>>>>>> origin/master
 
     @Override
     public void start(Stage stage) {
