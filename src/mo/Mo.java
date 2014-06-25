@@ -37,7 +37,6 @@ import javafx.stage.Stage;
  */
 public class Mo extends Application {
 
-//<<<<<<< HEAD
     private TableView<ExMusic> table = new TableView<ExMusic>();
     
     private ObservableList<ExMusic> data =
@@ -46,8 +45,6 @@ public class Mo extends Application {
                 new ExMusic("name2","artist2","album2","genre2","time2"),
                 new ExMusic("name3","artist3","album3","genre3","time3")
         );
-//>>>>>>> origin/master
-
 
     @Override
     public void start(Stage stage) {
