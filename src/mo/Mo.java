@@ -4,9 +4,10 @@ User Interface
 
 package mo;
 
-import java.awt.Desktop;
 import java.io.File;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,8 +24,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -41,9 +44,9 @@ public class Mo extends Application {
     
     private ObservableList<ExMusic> data =
         FXCollections.observableArrayList(
-                new ExMusic("name1","artist1","album1","genre1","time1"),
-                new ExMusic("name2","artist2","album2","genre2","time2"),
-                new ExMusic("name3","artist3","album3","genre3","time3")
+                new ExMusic("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
+                new ExMusic("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
+                new ExMusic("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
         );
 
     @Override
@@ -91,16 +94,75 @@ public class Mo extends Application {
         
         menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
         
+        // NAME COLUMN
         TableColumn nameCol = new TableColumn("Name");
+        nameCol.setMinWidth(200);
         nameCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("name"));
+        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameCol.setOnEditCommit(
+            new EventHandler<CellEditEvent<ExMusic, String>>() {
+                @Override
+                public void handle(CellEditEvent<ExMusic, String> t) {
+                    ((ExMusic) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())
+                    ).setName(t.getNewValue());
+                }
+            }
+        );
+        
+       //ARTIST COLUMN
         TableColumn artistCol = new TableColumn("Artist");
+        artistCol.setMinWidth(150);
         artistCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("artist"));
+        artistCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        artistCol.setOnEditCommit(
+            new EventHandler<CellEditEvent<ExMusic, String>>() {
+                @Override
+                public void handle(CellEditEvent<ExMusic, String> t) {
+                    ((ExMusic) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())
+                    ).setArtist(t.getNewValue());
+                }
+            }
+        );
+        
+        //ALBUM COLUMN
         TableColumn albumCol = new TableColumn("Album");
+        albumCol.setMinWidth(175);
         albumCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("album"));
+        albumCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        albumCol.setOnEditCommit(
+            new EventHandler<CellEditEvent<ExMusic, String>>() {
+                @Override
+                public void handle(CellEditEvent<ExMusic, String> t) {
+                    ((ExMusic) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())
+                    ).setAlbum(t.getNewValue());
+                }
+            }
+        );
+        
+        //GENRE COLUMN
         TableColumn genreCol = new TableColumn("Genre");
+        genreCol.setMinWidth(103);
         genreCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("genre"));
+        genreCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        genreCol.setOnEditCommit(
+            new EventHandler<CellEditEvent<ExMusic, String>>() {
+                @Override
+                public void handle(CellEditEvent<ExMusic, String> t) {
+                    ((ExMusic) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())
+                    ).setGenre(t.getNewValue());
+                }
+            }
+        );
+        
+        //TIME COLUMN
         TableColumn timeCol = new TableColumn("Time");
+        timeCol.setMinWidth(50);
         timeCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("time"));
+        
         
         table.setItems(data);
         
