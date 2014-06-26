@@ -103,7 +103,7 @@ public class Mo extends Application {
         timeCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("time"));
         
         table.setItems(data);
-        table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
+        
         final VBox tbl = new VBox();
         tbl.setSpacing(5);
         tbl.setPadding(new Insets(10, 10, 20, 10));
@@ -122,7 +122,7 @@ public class Mo extends Application {
         Button btn2 = new Button();
         btn2.setText("Load Examples");
         btn2.setOnAction((ActionEvent t) -> {
-            
+            table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
 	});
         
         btnbox.getChildren().add(btn2);
