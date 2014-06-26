@@ -6,9 +6,6 @@ package mo;
 
 import java.io.File;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,14 +37,18 @@ import javafx.stage.Stage;
  */
 public class Mo extends Application {
 
-    private TableView<ExMusic> table = new TableView<ExMusic>();
+    private final TableView<ExMusic> table;
     
-    private ObservableList<ExMusic> data =
+    private final ObservableList<ExMusic> data =
         FXCollections.observableArrayList(
                 new ExMusic("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
                 new ExMusic("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
                 new ExMusic("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
         );
+
+    public Mo() {
+        this.table = new TableView<>();
+    }
 
     @Override
     public void start(Stage stage) {
@@ -97,7 +98,7 @@ public class Mo extends Application {
         // NAME COLUMN
         TableColumn nameCol = new TableColumn("Name");
         nameCol.setMinWidth(200);
-        nameCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("name"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         nameCol.setOnEditCommit(
             new EventHandler<CellEditEvent<ExMusic, String>>() {
@@ -113,7 +114,7 @@ public class Mo extends Application {
        //ARTIST COLUMN
         TableColumn artistCol = new TableColumn("Artist");
         artistCol.setMinWidth(150);
-        artistCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("artist"));
+        artistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
         artistCol.setCellFactory(TextFieldTableCell.forTableColumn());
         artistCol.setOnEditCommit(
             new EventHandler<CellEditEvent<ExMusic, String>>() {
@@ -129,7 +130,7 @@ public class Mo extends Application {
         //ALBUM COLUMN
         TableColumn albumCol = new TableColumn("Album");
         albumCol.setMinWidth(175);
-        albumCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("album"));
+        albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
         albumCol.setCellFactory(TextFieldTableCell.forTableColumn());
         albumCol.setOnEditCommit(
             new EventHandler<CellEditEvent<ExMusic, String>>() {
@@ -145,7 +146,7 @@ public class Mo extends Application {
         //GENRE COLUMN
         TableColumn genreCol = new TableColumn("Genre");
         genreCol.setMinWidth(103);
-        genreCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("genre"));
+        genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
         genreCol.setCellFactory(TextFieldTableCell.forTableColumn());
         genreCol.setOnEditCommit(
             new EventHandler<CellEditEvent<ExMusic, String>>() {
@@ -161,7 +162,7 @@ public class Mo extends Application {
         //TIME COLUMN
         TableColumn timeCol = new TableColumn("Time");
         timeCol.setMinWidth(50);
-        timeCol.setCellValueFactory(new PropertyValueFactory<ExMusic, String>("time"));
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
         
         
         table.setItems(data);
@@ -266,11 +267,11 @@ public class Mo extends Application {
         private String time;
  
         private ExMusic(String name, String artist, String album, String genre, String time) {
-            this.name = new String(name);
-            this.artist = new String(artist);
-            this.album = new String(album);
-            this.genre = new String(genre);
-            this.time = new String(time);
+            this.name = name;
+            this.artist = artist;
+            this.album = album;
+            this.genre = genre;
+            this.time = time;
         }
         //---------
         public String getName() {
