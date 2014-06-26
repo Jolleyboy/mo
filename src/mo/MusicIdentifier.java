@@ -26,15 +26,14 @@ public class MusicIdentifier {
     public void identifyNewSongs() {
 
     }
-<<<<<<< HEAD
-
+   
     public String fingerprint(MusicFile mf) {
         String line = "";
         String fingerprint = "";
         String[] info;
         String[] temp;
         ArrayList<String> theInfo = new ArrayList<String>();
-        String fpcalc = "C:\\Users\\Joshua\\Documents\\NetBeansProjects\\mo\\src\\musicIdentifier\\fpcalc.exe";
+        String fpcalc = "lib\\fp\\fpcalc.exe";
             
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new ProcessBuilder(fpcalc,mf.getPath()).start().getInputStream()))){
             while ((line = br.readLine()) != null) {
