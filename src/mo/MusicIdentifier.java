@@ -7,13 +7,22 @@ package mo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jaudiotagger.tag.Tag;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 /**
  *
@@ -22,7 +31,8 @@ import org.jaudiotagger.tag.Tag;
 public class MusicIdentifier {
 
     Model model = Model.getInstance();
-
+    JSONObject jsob;
+  
     public void identifyNewSongs() {
 
     }
@@ -41,6 +51,8 @@ public class MusicIdentifier {
             }
         } catch (IOException ex) {
             Logger.getLogger(MusicIdentifier.class.getName()).log(Level.SEVERE, null, ex);
+            fingerprint = "File not found";
+            return fingerprint;
         }
         
         info = fingerprint.split("\n");
@@ -52,6 +64,41 @@ public class MusicIdentifier {
         return fingerprint;
     }
 
-    private void identify() {
+    public void identify(String fingerprint) {
+        try {
+            String info[] = fingerprint.split(" ");
+            URI uri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost("api.acoustid.org")
+                    .setPath("/v2/lookup")
+                    .setParameter("client", "wDj2TMtS")
+                    .setParameter("meta","recordings")
+                    .setParameter("duration",info[0])
+                    .setParameter("fingerprint", info[1])
+                    .build();
+//            
+//            String url = uri.toString();
+//            url = url.replace("%2B", "+");
+            
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(uri);
+            CloseableHttpResponse response1 = httpclient.execute(httpGet);
+            System.out.println(response1.getStatusLine());
+            HttpEntity entity1 = response1.getEntity();
+                jsob = new JSONObject(EntityUtils.toString(entity1));
+            EntityUtils.consume(entity1);
+            response1.close();
+        } catch (IOException ex) {
+            Logger.getLogger(MusicIdentifier.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(MusicIdentifier.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println(jsob.get("results"));
+        JSONArray jarray = new JSONArray(jsob.get("results"));
+        System.out.println(jarray.toString());
+        //jsob = new JSONObject(jsob.get("recordings"));
+        //System.out.println(jsob.toString());
+        
     }
 }

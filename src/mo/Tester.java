@@ -8,6 +8,6 @@ public class Tester{
   
   JSONObject jsob = new JSONObject(s);
   System.out.println(jsob.toString());
-  System.out.println(jsob.get("results"));
+  System.out.println();
   }
 }
