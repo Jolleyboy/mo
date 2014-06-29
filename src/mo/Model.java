@@ -9,15 +9,16 @@ import mo.MusicFile;
 
 /***************************************************
 * Class Model
-*    Handles everything file/database/data related. al
+*    Handles everything file/database/data related.
 ****************************************************/
 
 public class Model {
 
   private static Model singleton = new Model();
-  private List<MusicFile> listMF;
+  private ObservableList<MusicFile> listMF;
   private File selectedDirectory;
   private Model() {
+        
     //to prevent making seperate instances
   }
 
@@ -26,11 +27,11 @@ public class Model {
     return singleton;
   }
   
-  public List<MusicFile> getList() {
+  public ObservableList<MusicFile> getList() {
       return listMF;
   }
   
-  public void setList(List<MusicFile> listMF) {
+  public void setList(ObservableList<MusicFile> listMF) {
       this.listMF = listMF;
   }
 }
