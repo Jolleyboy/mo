@@ -39,7 +39,7 @@ import mo.MusicFile;
  */
 public class Mo extends Application {
 
-    private TableView<MusicFile> table = new TableView<MusicFile>();
+    private TableView<MusicFile> table;
     private Model model = Model.getInstance();
     //private ObservableList<MusicFile> data = model.getList();
 
@@ -50,8 +50,9 @@ public class Mo extends Application {
                 //new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
                 //new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
         );
-      
+    
     public Mo() {
+        this.table = new TableView<>();
         this.table = new TableView<>();
     }
     
@@ -182,7 +183,7 @@ public class Mo extends Application {
         
     	stage.setTitle("Music Organizer v1.1");
         Scene scene = new Scene(new VBox(), 700, 550);
-         
+        
         table.setEditable(true);
         
         MenuBar menuBar = initMenus(stage); //INITIALIZE MENUS
