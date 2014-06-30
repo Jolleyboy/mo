@@ -53,7 +53,6 @@ public class Mo extends Application {
     
     public Mo() {
         this.table = new TableView<>();
-        this.table = new TableView<>();
     }
     
     public MenuBar initMenus(Stage stage){
@@ -101,7 +100,7 @@ public class Mo extends Application {
         TableColumn nameCol = new TableColumn("Name");
         nameCol.setMinWidth(200);
 
-        nameCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("name"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("title"));
 
         nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         nameCol.setOnEditCommit(
