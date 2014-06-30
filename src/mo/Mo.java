@@ -1,7 +1,3 @@
-/*
-User Interface
- */
-
 package mo;
 
 import java.io.File;
@@ -31,24 +27,20 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import mo.MusicFile;
 
-/**
- *
- * @author Matt
- */
 public class Mo extends Application {
 
-    private TableView<MusicFile> table;
-    private Model model = Model.getInstance();
+    private final TableView<MusicFile> table;
+    private final Model model = Model.getInstance();
+    private MusicCollector mc;
     //private ObservableList<MusicFile> data = model.getList();
 
-    private ObservableList<MusicFile> data =
+    private final ObservableList<MusicFile> data =
         FXCollections.observableArrayList(
-                new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00TEst")
-                //new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
-                //new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
-                //new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
+            new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00Test")
+            //new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
+            //new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
+            //new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
         );
     
     public Mo() {
@@ -60,14 +52,20 @@ public class Mo extends Application {
         // --- File Menu
         Menu menuFile = new Menu("File");
         
-        MenuItem open = new MenuItem("Music Scan"); // -- Music Scan Submenu
-        open.setOnAction((ActionEvent t) -> {
-            final DirectoryChooser directoryChooser = new DirectoryChooser();
-            File selectedDirectory = directoryChooser.showDialog(stage);
-            if (selectedDirectory != null) {
-                System.out.println(selectedDirectory);
+        MenuItem open = new MenuItem("Search for Music"); // -- Search Submenu
+        open.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                final DirectoryChooser directoryChooser = new DirectoryChooser();
+                File selectedDirectory = directoryChooser.showDialog(stage);
+                if (selectedDirectory != null) {
+                    System.out.println("Scanning " + selectedDirectory.getPath());
+                    mc.setPath(selectedDirectory.getPath());
+                    mc.searchComp(selectedDirectory.getPath());
+                    
+                }
             }
-	});
+        });
 
         MenuItem exit = new MenuItem("Exit"); // -- Exit Submenu
         exit.setOnAction((ActionEvent t) -> {
@@ -100,7 +98,7 @@ public class Mo extends Application {
         TableColumn nameCol = new TableColumn("Name");
         nameCol.setMinWidth(200);
 
-        nameCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("title"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("title"));
 
         nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         nameCol.setOnEditCommit(
@@ -118,7 +116,7 @@ public class Mo extends Application {
         TableColumn artistCol = new TableColumn("Artist");
         artistCol.setMinWidth(150);
 
-        artistCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("artist"));
+        artistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
 
         artistCol.setCellFactory(TextFieldTableCell.forTableColumn());
         artistCol.setOnEditCommit(
@@ -136,7 +134,7 @@ public class Mo extends Application {
         TableColumn albumCol = new TableColumn("Album");
         albumCol.setMinWidth(175);
 
-        albumCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("album"));
+        albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
 
         albumCol.setCellFactory(TextFieldTableCell.forTableColumn());
         albumCol.setOnEditCommit(
@@ -154,7 +152,7 @@ public class Mo extends Application {
         TableColumn genreCol = new TableColumn("Genre");
         genreCol.setMinWidth(103);
 
-        genreCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("genre"));
+        genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
 
         genreCol.setCellFactory(TextFieldTableCell.forTableColumn());
         genreCol.setOnEditCommit(
@@ -172,7 +170,7 @@ public class Mo extends Application {
         TableColumn timeCol = new TableColumn("Time");
         timeCol.setMinWidth(50);
 
-        timeCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("time"));
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         
         table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
     };
@@ -180,7 +178,7 @@ public class Mo extends Application {
     @Override
     public void start(Stage stage) {
         
-    	stage.setTitle("Music Organizer v1.1");
+    	stage.setTitle("Music Organizer v1.2");
         Scene scene = new Scene(new VBox(), 700, 550);
         
         table.setEditable(true);
@@ -189,7 +187,8 @@ public class Mo extends Application {
         
         initTable(); //INITIALIZE TABLE
         
-        //data.add(new MusicFile("music\\seattle.mp3"));
+        data.add(new MusicFile("music\\seattle.mp3"));
+        data.add(new MusicFile("music\\crazy.mp3"));
         table.setItems(data);
         
         final VBox tbl = new VBox();
