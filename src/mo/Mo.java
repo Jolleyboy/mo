@@ -6,6 +6,7 @@ package mo;
 
 import java.io.File;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,6 +31,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import mo.MusicFile;
 
 /**
  *
@@ -37,29 +39,24 @@ import javafx.stage.Stage;
  */
 public class Mo extends Application {
 
-    private final TableView<ExMusic> table;
-    
-    private final ObservableList<ExMusic> data =
-        FXCollections.observableArrayList(
-                new ExMusic("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
-                new ExMusic("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
-                new ExMusic("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
-        );
+    private TableView<MusicFile> table = new TableView<MusicFile>();
+    private Model model = Model.getInstance();
+    //private ObservableList<MusicFile> data = model.getList();
 
+    private ObservableList<MusicFile> data =
+        FXCollections.observableArrayList(
+                new MusicFile("","","","","")
+                //new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
+                //new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
+                //new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
+        );
+      
     public Mo() {
         this.table = new TableView<>();
     }
-
-    @Override
-    public void start(Stage stage) {
-
-    	stage.setTitle("Music Organizer v1.1");
-        Scene scene = new Scene(new VBox(), 700, 550);
-         
-        table.setEditable(true);
-        
+    
+    public MenuBar initMenus(Stage stage){
         MenuBar menuBar = new MenuBar();
- 
         // --- File Menu
         Menu menuFile = new Menu("File");
         
@@ -95,16 +92,22 @@ public class Mo extends Application {
         
         menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
         
+        return menuBar;
+    };
+    
+    public void initTable(){
         // NAME COLUMN
         TableColumn nameCol = new TableColumn("Name");
         nameCol.setMinWidth(200);
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        nameCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("name"));
+
         nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         nameCol.setOnEditCommit(
-            new EventHandler<CellEditEvent<ExMusic, String>>() {
+            new EventHandler<CellEditEvent<MusicFile, String>>() {
                 @Override
-                public void handle(CellEditEvent<ExMusic, String> t) {
-                    ((ExMusic) t.getTableView().getItems().get(
+                public void handle(CellEditEvent<MusicFile, String> t) {
+                    ((MusicFile) t.getTableView().getItems().get(
                     t.getTablePosition().getRow())
                     ).setName(t.getNewValue());
                 }
@@ -114,13 +117,15 @@ public class Mo extends Application {
        //ARTIST COLUMN
         TableColumn artistCol = new TableColumn("Artist");
         artistCol.setMinWidth(150);
-        artistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
+
+        artistCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("artist"));
+
         artistCol.setCellFactory(TextFieldTableCell.forTableColumn());
         artistCol.setOnEditCommit(
-            new EventHandler<CellEditEvent<ExMusic, String>>() {
+            new EventHandler<CellEditEvent<MusicFile, String>>() {
                 @Override
-                public void handle(CellEditEvent<ExMusic, String> t) {
-                    ((ExMusic) t.getTableView().getItems().get(
+                public void handle(CellEditEvent<MusicFile, String> t) {
+                    ((MusicFile) t.getTableView().getItems().get(
                     t.getTablePosition().getRow())
                     ).setArtist(t.getNewValue());
                 }
@@ -130,13 +135,15 @@ public class Mo extends Application {
         //ALBUM COLUMN
         TableColumn albumCol = new TableColumn("Album");
         albumCol.setMinWidth(175);
-        albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
+
+        albumCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("album"));
+
         albumCol.setCellFactory(TextFieldTableCell.forTableColumn());
         albumCol.setOnEditCommit(
-            new EventHandler<CellEditEvent<ExMusic, String>>() {
+            new EventHandler<CellEditEvent<MusicFile, String>>() {
                 @Override
-                public void handle(CellEditEvent<ExMusic, String> t) {
-                    ((ExMusic) t.getTableView().getItems().get(
+                public void handle(CellEditEvent<MusicFile, String> t) {
+                    ((MusicFile) t.getTableView().getItems().get(
                     t.getTablePosition().getRow())
                     ).setAlbum(t.getNewValue());
                 }
@@ -146,13 +153,15 @@ public class Mo extends Application {
         //GENRE COLUMN
         TableColumn genreCol = new TableColumn("Genre");
         genreCol.setMinWidth(103);
-        genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
+
+        genreCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("genre"));
+
         genreCol.setCellFactory(TextFieldTableCell.forTableColumn());
         genreCol.setOnEditCommit(
-            new EventHandler<CellEditEvent<ExMusic, String>>() {
+            new EventHandler<CellEditEvent<MusicFile, String>>() {
                 @Override
-                public void handle(CellEditEvent<ExMusic, String> t) {
-                    ((ExMusic) t.getTableView().getItems().get(
+                public void handle(CellEditEvent<MusicFile, String> t) {
+                    ((MusicFile) t.getTableView().getItems().get(
                     t.getTablePosition().getRow())
                     ).setGenre(t.getNewValue());
                 }
@@ -162,9 +171,25 @@ public class Mo extends Application {
         //TIME COLUMN
         TableColumn timeCol = new TableColumn("Time");
         timeCol.setMinWidth(50);
-        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        timeCol.setCellValueFactory(new PropertyValueFactory<MusicFile, String>("time"));
         
+        table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
+    };
+    
+    @Override
+    public void start(Stage stage) {
         
+    	stage.setTitle("Music Organizer v1.1");
+        Scene scene = new Scene(new VBox(), 700, 550);
+         
+        table.setEditable(true);
+        
+        MenuBar menuBar = initMenus(stage); //INITIALIZE MENUS
+        
+        initTable(); //INITIALIZE TABLE
+        
+        //data.add(new MusicFile("music\\seattle.mp3"));
         table.setItems(data);
         
         final VBox tbl = new VBox();
@@ -185,7 +210,7 @@ public class Mo extends Application {
         Button btn2 = new Button();
         btn2.setText("Load Examples");
         btn2.setOnAction((ActionEvent t) -> {
-            table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
+            
 	});
         
         btnbox.getChildren().add(btn2);
@@ -242,14 +267,13 @@ public class Mo extends Application {
             stage2.show();
             }
         });
+        
         btnbox.getChildren().add(btn3);
         
         btns.getChildren().addAll(btnbox);
         
-        ((VBox) scene.getRoot()).getChildren().addAll(menuBar);
-        ((VBox) scene.getRoot()).getChildren().addAll(tbl);
-        ((VBox) scene.getRoot()).getChildren().addAll(btns);
-        
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, tbl, btns);
+       
         stage.setScene(scene);
         stage.show();
     }
@@ -258,20 +282,21 @@ public class Mo extends Application {
         launch(args);
     }
     
-    public static class ExMusic {
+    public static class MusicFile {
  
         private String name;
         private String artist;
         private String album;
         private String genre;
         private String time;
- 
-        private ExMusic(String name, String artist, String album, String genre, String time) {
-            this.name = name;
-            this.artist = artist;
-            this.album = album;
-            this.genre = genre;
-            this.time = time;
+
+        private MusicFile(String name, String artist, String album, String genre, String time) {
+            this.name = new String(name);
+            this.artist = new String(artist);
+            this.album = new String(album);
+            this.genre = new String(genre);
+            this.time = new String(time);
+
         }
         //---------
         public String getName() {
