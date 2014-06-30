@@ -37,10 +37,10 @@ public class Mo extends Application {
 
     private final ObservableList<MusicFile> data =
         FXCollections.observableArrayList(
-            new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00Test")
-            //new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
-            //new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
-            //new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
+            new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00Test"),
+            new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
+            new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
+            new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
         );
     
     public Mo() {
