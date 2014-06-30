@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mo;
 
 import java.io.File;
@@ -80,7 +74,7 @@ public class MusicFile {
     
     public MusicFile(String name, String artist, String album, String genre, String time) {
         File file = new File("music\\seattle.mp3");
-        AudioFile af;
+        AudioFile af = null;
         try {
             af = AudioFileIO.read(file);
             tag = af.getTag();//get the tag
