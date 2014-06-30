@@ -45,7 +45,7 @@ public class Mo extends Application {
 
     private ObservableList<MusicFile> data =
         FXCollections.observableArrayList(
-                new MusicFile("","","","","")
+                new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00TEst")
                 //new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
                 //new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
                 //new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
@@ -109,7 +109,7 @@ public class Mo extends Application {
                 public void handle(CellEditEvent<MusicFile, String> t) {
                     ((MusicFile) t.getTableView().getItems().get(
                     t.getTablePosition().getRow())
-                    ).setName(t.getNewValue());
+                    ).setTitle(t.getNewValue());
                 }
             }
         );
@@ -280,59 +280,5 @@ public class Mo extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-    
-    public static class MusicFile {
- 
-        private String name;
-        private String artist;
-        private String album;
-        private String genre;
-        private String time;
-
-        private MusicFile(String name, String artist, String album, String genre, String time) {
-            this.name = new String(name);
-            this.artist = new String(artist);
-            this.album = new String(album);
-            this.genre = new String(genre);
-            this.time = new String(time);
-
-        }
-        //---------
-        public String getName() {
-            return name;
-        }
-        public void setName(String name1) {
-            this.name = name1;
-        }
-        //---------
-        public String getArtist() {
-            return artist;
-        }
-        public void setArtist(String artist1) {
-            this.artist = artist1;
-        }
-        //---------
-        public String getAlbum() {
-            return album;
-        }
-        public void setAlbum(String album1) {
-            this.album = album1;
-        }
-        //---------
-        public String getGenre() {
-            return genre;
-        }
-        public void setGenre(String genre1) {
-            this.genre = genre1;
-        }
-        //---------
-        public String getTime() {
-            return time;
-        }
-        public void setTime(String time1) {
-            this.time = time1;
-        }
-        //---------
     }
 }

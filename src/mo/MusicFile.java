@@ -31,6 +31,7 @@ public class MusicFile {
     private Tag tag;                //The ID3 tag 
     private Path path;              //The Path to the music file
     private AudioHeader header;     //The header of the music file
+    private String duration;
     private int id;
     /**
      * Constructor that takes an AudioFile
@@ -75,6 +76,24 @@ public class MusicFile {
             Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
         }
     
+    }
+    
+    public MusicFile(String name, String artist, String album, String genre, String time) {
+        File file = new File("music\\seattle.mp3");
+        AudioFile af;
+        try {
+            af = AudioFileIO.read(file);
+            tag = af.getTag();//get the tag
+            header = af.getAudioHeader();
+            path = af.getFile().toPath();
+        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
+            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setTitle(name);
+        this.setArtist(artist);
+        this.setAlbum(album);
+        this.setGenre(genre);
+        this.duration = time;
     }
     /**
      * Sets the artist for this music file's tag
@@ -158,4 +177,5 @@ public class MusicFile {
             Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 }
