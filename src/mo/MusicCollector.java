@@ -2,6 +2,7 @@ package mo;
 
 import java.io.File;
 import java.util.List;
+import javafx.collections.ObservableList;
 
 
 public class MusicCollector {
@@ -69,9 +70,9 @@ public class MusicCollector {
      * @param newFile 
      */
     private void addToList(MusicFile newFile) {
-         List<MusicFile> mfList = model.getList();
-         mfList.add(newFile);
-         model.setList(mfList);
+        ObservableList<MusicFile> mfList = model.getList();
+        mfList.addAll(newFile);
+        model.setList(mfList);
     }
     
 }
