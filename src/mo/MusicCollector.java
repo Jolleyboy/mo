@@ -31,7 +31,7 @@ public class MusicCollector {
         for (File listOfFile : listOfFiles) {
             if (listOfFile.isDirectory()) {
                 folder = path + listOfFile.getName() + "\\";
-                System.out.println(folder);
+                //System.out.println(folder);
                 searchComp(folder);
             } else {
                 folder = path + "\\";
@@ -46,7 +46,7 @@ public class MusicCollector {
      * directory.
      * @param path 
      */
-    private void searchFiles(String path) {
+    void searchFiles(String path) {
         String files;
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
@@ -56,8 +56,8 @@ public class MusicCollector {
                 files = listOfFile.getName();
                 if (files.endsWith(".mp3") || files.endsWith(".wav") || files.endsWith(".flac") || files.endsWith(".m4a") || files.endsWith(".ogg") || files.endsWith(".aac")) {
                     //Change files into audiofiles and add them into a list
-                    MusicFile mf = new MusicFile(files);
-                    addToList(mf);
+                    //MusicFile mf = new MusicFile(files);
+                    //addToList(mf);
                     System.out.println(files);
                 }
             }
