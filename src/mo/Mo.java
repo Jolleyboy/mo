@@ -69,7 +69,6 @@ public class Mo extends Application {
                     catch (NullPointerException npe) {
                         System.out.println("ERROR: NULL POINTER EXCEPTION");
                     }
-                    
                 }
             }
         });
