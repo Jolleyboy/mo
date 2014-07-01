@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 
 public class MusicCollector {
     Model model = Model.getInstance();
-    public String path;// = "C:\\Users\\Rafael\\Music\\stcb\\";
+    public String path1;// = "C:\\Users\\Rafael\\Music\\stcb\\";
 
     /**
      * This method should be called to set the directory from which the
@@ -15,7 +15,7 @@ public class MusicCollector {
      * @param newPath 
      */
     public void setPath(String newPath) {
-        path = newPath;
+        path1 = newPath;
     }
     
     /**
