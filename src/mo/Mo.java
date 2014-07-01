@@ -60,8 +60,15 @@ public class Mo extends Application {
                 File selectedDirectory = directoryChooser.showDialog(stage);
                 if (selectedDirectory != null) {
                     System.out.println("Scanning " + selectedDirectory.getPath());
-                    mc.setPath(selectedDirectory.getPath());
-                    mc.searchComp(selectedDirectory.getPath());
+                    //mc.setPath(selectedDirectory.getPath());
+                    System.out.println(selectedDirectory.getPath() + "\\");
+                    //System.out.println(mc.path);
+                    try {
+                        mc.searchComp(selectedDirectory.getPath() + "\\");
+                    }
+                    catch (NullPointerException npe) {
+                        System.out.println("ERROR: NULL POINTER EXCEPTION");
+                    }
                     
                 }
             }
@@ -188,7 +195,7 @@ public class Mo extends Application {
         initTable(); //INITIALIZE TABLE
         
         data.add(new MusicFile("music\\seattle.mp3"));
-        data.add(new MusicFile("music\\crazy.mp3"));
+        //data.add(new MusicFile("music\\crazy.mp3"));
         table.setItems(data);
         
         final VBox tbl = new VBox();
