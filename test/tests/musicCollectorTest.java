@@ -17,10 +17,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/**
- *
- * @author リン
- */
 public class musicCollectorTest {
     
     public musicCollectorTest() {
@@ -34,7 +30,7 @@ public class musicCollectorTest {
     public void searchCompTest() {
         MusicFile mf = new MusicFile("C:\\Arioch\\ProgProj\\Java\\mo\\seattle.mp3);
         mc.searchComp(path);
-        Assert.assertEquals(mo.getList().contains("C:\\Arioch\\ProgProj\\Java\\mo\\seattle.mp3"), true);
+        Assert.assertEquals(mo.getList().contains(mf), true);
     }
 
     @BeforeClass
