@@ -67,6 +67,7 @@ public class Mo extends Application {
                         mc.searchComp(selectedDirectory.getPath() + "\\");
                     }
                     catch (NullPointerException npe) {
+                        npe.printStackTrace();
                         System.out.println("ERROR: NULL POINTER EXCEPTION");
                     }
                 }
