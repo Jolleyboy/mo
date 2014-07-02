@@ -35,13 +35,8 @@ public class Mo extends Application {
     private MusicCollector mc;
     //private ObservableList<MusicFile> data = model.getList();
 
-    private final ObservableList<MusicFile> data =
-        FXCollections.observableArrayList(
-            new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00Test"),
-            new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
-            new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
-            new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
-        );
+    private ObservableList<MusicFile> data = model.getList();
+    
     
     public Mo() {
         this.table = new TableView<>();
