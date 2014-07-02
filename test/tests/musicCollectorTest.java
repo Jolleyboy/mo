@@ -15,14 +15,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  *
  * @author リン
  */
-public class musicCollectionTest {
+public class musicCollectorTest {
     
-    public musicCollectionTest() {
+    public musicCollectorTest() {
     }
 
     MusicCollector mc = new MusicCollector();
@@ -31,9 +32,9 @@ public class musicCollectionTest {
     
     @Test
     public void searchCompTest() {
-        MusicFile mf = new MusicFile("C:\\Arioch\\ProgProj\\Java\\mo\\);
+        MusicFile mf = new MusicFile("C:\\Arioch\\ProgProj\\Java\\mo\\seattle.mp3);
         mc.searchComp(path);
-        Assert.assertEquals(getList().contains(), );
+        Assert.assertEquals(mo.getList().contains("C:\\Arioch\\ProgProj\\Java\\mo\\seattle.mp3"), true);
     }
 
     @BeforeClass
