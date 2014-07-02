@@ -42,11 +42,11 @@ public class Model {
       this.listMF = listMF;
   }
   
-  public void setDirectory(File directory) {
+  public void setPath(File directory) {
       this.selectedDirectory = directory;
   }
   
-  public File getDirectory() {
+  public File getPath() {
       return selectedDirectory;
   }
 }
