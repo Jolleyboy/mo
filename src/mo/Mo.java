@@ -1,7 +1,9 @@
 package mo;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,6 +47,7 @@ public class Mo extends Application {
     
     public Mo() {
         this.table = new TableView<>();
+        mc = new MusicCollector();
     }
     
     public MenuBar initMenus(Stage stage){
@@ -65,10 +68,10 @@ public class Mo extends Application {
                     //System.out.println(mc.path);
                     try {
                         mc.searchComp(selectedDirectory.getPath() + "\\");
-                    }
-                    catch (NullPointerException npe) {
+                        
+                    } catch (NullPointerException npe) {
                         npe.printStackTrace();
-                        System.out.println("ERROR: NULL POINTER EXCEPTION");
+                        System.out.println("ERROR: Null Pointer Exception");
                     }
                 }
             }
@@ -84,7 +87,7 @@ public class Mo extends Application {
  
         // --- Edit Menu
         Menu menuEdit = new Menu("Edit");
-        MenuItem edits = new MenuItem("Edits"); // -- Edits Submenu
+        MenuItem edits = new MenuItem("Add"); // -- Edits Submenu
         menuEdit.getItems().addAll(edits);
         // ---
  
@@ -195,7 +198,7 @@ public class Mo extends Application {
         initTable(); //INITIALIZE TABLE
         
         data.add(new MusicFile("music\\seattle.mp3"));
-        //data.add(new MusicFile("music\\crazy.mp3"));
+        data.add(new MusicFile("music\\crazy.mp3"));
         table.setItems(data);
         
         final VBox tbl = new VBox();
