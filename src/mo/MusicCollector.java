@@ -56,8 +56,8 @@ public class MusicCollector {
                 files = listOfFile.getName();
                 if (files.endsWith(".mp3") || files.endsWith(".wav") || files.endsWith(".flac") || files.endsWith(".m4a") || files.endsWith(".ogg") || files.endsWith(".aac")) {
                     //Change files into audiofiles and add them into a list
-                    //MusicFile mf = new MusicFile(files);
-                    //addToList(mf);
+                    MusicFile mf = new MusicFile(files);
+                    addToList(mf);
                     System.out.println(files);
                 }
             }
