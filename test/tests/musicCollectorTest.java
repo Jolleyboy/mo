@@ -45,6 +45,14 @@ public class musicCollectorTest {
         Assert.assertEquals(ol.contains(mf), true);
     }
     
+    //once searchComp passes this test we'll be it's working
+    @Test
+    public void fullTest() {
+        mc.searchComp("music\\");
+        Assert.assertEquals(model.getList().contains(new MusicFile("music\\seattle.mp3")),true);
+        Assert.assertEquals(model.getList().contains(new MusicFile("music\\crazy.mp3")),true);
+        Assert.assertEquals(model.getList().contains(new MusicFile("music\\otherMusic\\drivemycar.mp3")),true);
+    }
     
     //When you add it manually into a list and check, it works.
     @Test
