@@ -24,10 +24,31 @@ public class musicFileTest {
     public void musicFileNameTest() {
         mf.setArtist("test");
         Assert.assertEquals(mf.getArtist(), "test");
+        mf.setArtist("test2");
+        Assert.assertEquals(mf.getArtist(),"test2");
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    
+    @Test
+    public void musicFileArtistTest() {
+        mf.setArtist("test");
+        Assert.assertEquals(mf.getArtist(), "test");
+    }
+    
+    @Test
+    public void musicFileAlbumTest() {
+        mf.setAlbum("test");
+        Assert.assertEquals(mf.getAlbum(), "test");
+    }
+    
+    @Test
+    public void musicFileDurationTest() {
+        mf.setDuration("3:21");
+        Assert.assertEquals(mf.getDuration(), "3:21");
+    }
+    
+    @Test
+    public void musicFileGenreTest() {
+        mf.setGenre("test");
+        Assert.assertEquals(mf.getGenre(), "test");
+    }
 }

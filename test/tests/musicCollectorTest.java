@@ -6,6 +6,7 @@
 
 package tests;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mo.Model;
 import mo.MusicCollector;
@@ -32,13 +33,36 @@ public class musicCollectorTest {
         MusicFile mf = new MusicFile("music\\seattle.mp3");
         mc.searchComp(path);
         ObservableList<MusicFile> ol = model.getList();
+        
+        //for debugging.  Shows what files are in the list
         int numFiles = 0;
         for (MusicFile file : ol) {
             System.out.println("File number: " + ++numFiles);
             System.out.println("Music File path: " + mf.getPath());
-            System.out.println("Music File title: " + mf.getTitle() + "\n");
-            
+            System.out.println("Music File title: " + mf.getTitle() + "\n");    
         }
+        
         Assert.assertEquals(ol.contains(mf), true);
+    }
+    
+    
+    //When you add it manually into a list and check, it works.
+    @Test
+    public void containsTest() {
+        ObservableList<MusicFile> ol = FXCollections.observableArrayList();
+        MusicFile mf = new MusicFile("music\\seattle.mp3");
+        ol.add(mf);
+        Assert.assertEquals(ol.contains(mf), true);
+    }
+    
+    //When you add it to the model and check it, it works.  There must be
+    //something wrong with the MusicCollector algorithms
+    @Test
+    public void modelTest() {
+        ObservableList<MusicFile> ol = model.getList();
+        MusicFile mf = new MusicFile("music\\seattle.mp3");
+        ol.add(mf);
+        model.setList(ol);
+        Assert.assertEquals(model.getList().contains(mf), true);
     }
 }
