@@ -2,7 +2,12 @@ package mo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.logging.Level;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
@@ -29,18 +34,25 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 public class Mo extends Application {
-
+    
     private final TableView<MusicFile> table;
     private final Model model = Model.getInstance();
     private MusicCollector mc;
+    private MusicIdentifier mi;
+    private Logger logger = LoggerFactory.getLogger(Mo.class);
     //private ObservableList<MusicFile> data = model.getList();
 
     private ObservableList<MusicFile> data = model.getList();
     
     
-    public Mo() {
+    public Mo() { 
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
         this.table = new TableView<>();
         mc = new MusicCollector();
     }
@@ -238,6 +250,8 @@ public class Mo extends Application {
                 stage2.setScene(scene2);
                 stage2.show(); 
                 
+                
+                
                 for (int i = 0; i < values.length; i++) {
                     final Label label = labels[i] = new Label();
                     label.setText("Scanning  ");
@@ -253,6 +267,9 @@ public class Mo extends Application {
                     hb.setAlignment(Pos.CENTER);
                     hb.getChildren().addAll(label, pb, pin);
                 }
+                
+                //mi.identifyNewSongs();
+                //data = model.getList();
                 
                 final VBox vb = new VBox();
                 final HBox btnbox2 = new HBox(20);

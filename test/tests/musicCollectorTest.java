@@ -28,7 +28,7 @@ public class musicCollectorTest {
     
     @Test
     public void searchCompTest() {
-        MusicFile mf = new MusicFile("C:\\Arioch\\ProgProj\\Java\\mo\\seattle.mp3);
+        MusicFile mf = new MusicFile("music\\seattle.mp3");
         mc.searchComp(path);
         Assert.assertEquals(mo.getList().contains(mf), true);
     }

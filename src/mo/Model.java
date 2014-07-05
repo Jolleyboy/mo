@@ -7,6 +7,8 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mo.MusicFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /***************************************************
 * Class Model
@@ -18,7 +20,11 @@ public class Model {
   private static Model singleton = new Model();
   private ObservableList<MusicFile> listMF;
   private File selectedDirectory;
+  private Logger logger = LoggerFactory.getLogger(Model.class);
+    
   private Model() {
+    
+     
     //for testing purposes only!!!
     listMF = FXCollections.observableArrayList(
             new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00Test"),

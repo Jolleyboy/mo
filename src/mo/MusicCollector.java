@@ -3,9 +3,13 @@ package mo;
 import java.io.File;
 import java.util.List;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class MusicCollector {
+    private Logger logger = LoggerFactory.getLogger(MusicCollector.class);
+    
     Model model = Model.getInstance();
     public String path1;// = "C:\\Users\\Rafael\\Music\\stcb\\";
 

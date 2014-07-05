@@ -3,8 +3,6 @@ package mo;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
@@ -16,12 +14,15 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *  Class MusicFile
  *  Holds the tag, header, and path information for a music file
  */
 public class MusicFile {
+    private Logger logger = LoggerFactory.getLogger(Model.class);
     private Tag tag;                //The ID3 tag 
     private Path path;              //The Path to the music file
     private AudioHeader header;     //The header of the music file
@@ -49,7 +50,7 @@ public class MusicFile {
             header = af.getAudioHeader();
             path = af.getFile().toPath();
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
-            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
         }
     
     }
@@ -67,11 +68,19 @@ public class MusicFile {
             header = af.getAudioHeader();
             path = af.getFile().toPath();
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
-            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
         }
     
     }
     
+    /**
+     * Build your own music file from a set of strings
+     * @param name
+     * @param artist
+     * @param album
+     * @param genre
+     * @param time 
+     */
     public MusicFile(String name, String artist, String album, String genre, String time) {
         File file = new File("music\\seattle.mp3");
         AudioFile af = null;
@@ -81,7 +90,7 @@ public class MusicFile {
             header = af.getAudioHeader();
             path = af.getFile().toPath();
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
-            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
         }
         this.setTitle(name);
         this.setArtist(artist);
@@ -97,7 +106,7 @@ public class MusicFile {
         try {
             tag.setField(FieldKey.ARTIST, artist);
         } catch (KeyNotFoundException | FieldDataInvalidException ex) {
-            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
         }
     }
     
@@ -128,7 +137,7 @@ public class MusicFile {
         try {
             tag.setField(FieldKey.TITLE, title);
         } catch (KeyNotFoundException | FieldDataInvalidException ex) {
-            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
         }
     }
     
@@ -148,7 +157,7 @@ public class MusicFile {
         try {
             tag.setField(FieldKey.GENRE, genre);
         } catch (KeyNotFoundException | FieldDataInvalidException ex) {
-            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
         }
     }
     
@@ -168,8 +177,15 @@ public class MusicFile {
         try {
             tag.setField(FieldKey.ALBUM, album);
         } catch (KeyNotFoundException | FieldDataInvalidException ex) {
-            Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
         }
     }
     
+    public String getDuration() {
+        return duration;
+    }
+    
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 }
