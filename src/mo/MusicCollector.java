@@ -34,7 +34,7 @@ public class MusicCollector {
                 //System.out.println(folder);
                 searchComp(folder);
             } else {
-                folder = path + "\\";
+                folder = path;// + "\\";
                 searchFiles(folder);
                 break;
             }
@@ -56,9 +56,9 @@ public class MusicCollector {
                 files = listOfFile.getName();
                 if (files.endsWith(".mp3") || files.endsWith(".wav") || files.endsWith(".flac") || files.endsWith(".m4a") || files.endsWith(".ogg") || files.endsWith(".aac")) {
                     //Change files into audiofiles and add them into a list
-                    MusicFile mf = new MusicFile(files);
+                    MusicFile mf = new MusicFile(path + files);
                     addToList(mf);
-                    System.out.println(files);
+                    System.out.println(path + files);
                 }
             }
         }
