@@ -49,6 +49,11 @@ public class MusicIdentifier {
         for (MusicFile mf : ol) {
             parseJSON(identify(fingerprint(mf)),mf);
             newList.add(mf);
+            try {
+                Thread.sleep(400); //Only 3 requests per second
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MusicIdentifier.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         model.setList(newList);
     }

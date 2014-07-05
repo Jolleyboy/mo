@@ -6,6 +6,7 @@
 
 package tests;
 
+import javafx.collections.ObservableList;
 import mo.Model;
 import mo.MusicCollector;
 import mo.MusicFile;
@@ -23,29 +24,21 @@ public class musicCollectorTest {
     }
 
     MusicCollector mc = new MusicCollector();
-    String path = "C:\\Arioch\\ProgProj\\Java\\mo\\";
-    Model mo = Model.getInstance();
+    String path = "music\\";
+    Model model = Model.getInstance();
     
     @Test
     public void searchCompTest() {
         MusicFile mf = new MusicFile("music\\seattle.mp3");
         mc.searchComp(path);
-        Assert.assertEquals(mo.getList().contains(mf), true);
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
+        ObservableList<MusicFile> ol = model.getList();
+        int numFiles = 0;
+        for (MusicFile file : ol) {
+            System.out.println("File number: " + ++numFiles);
+            System.out.println("Music File path: " + mf.getPath());
+            System.out.println("Music File title: " + mf.getTitle() + "\n");
+            
+        }
+        Assert.assertEquals(ol.contains(mf), true);
     }
 }
