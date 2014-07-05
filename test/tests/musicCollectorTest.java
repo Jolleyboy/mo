@@ -45,7 +45,7 @@ public class musicCollectorTest {
         Assert.assertEquals(ol.contains(mf), true);
     }
     
-    //once searchComp passes this test we'll be it's working
+    //once searchComp passes this test we'll be sure it's working
     @Test
     public void fullTest() {
         mc.searchComp("music\\");
