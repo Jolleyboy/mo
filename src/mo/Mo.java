@@ -40,6 +40,7 @@ public class Mo extends Application {
     
     public Mo() {
         this.table = new TableView<>();
+        mc = new MusicCollector();
     }
     
     public MenuBar initMenus(Stage stage){

@@ -20,8 +20,8 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONValue;
 
 
 /**
@@ -31,7 +31,7 @@ import org.json.JSONObject;
 public class MusicIdentifier {
 
     Model model = Model.getInstance();
-    JSONObject jsob;
+    JSONArray array;
   
     public void identifyNewSongs() {
 
@@ -85,7 +85,9 @@ public class MusicIdentifier {
             CloseableHttpResponse response1 = httpclient.execute(httpGet);
             System.out.println(response1.getStatusLine());
             HttpEntity entity1 = response1.getEntity();
-                jsob = new JSONObject(EntityUtils.toString(entity1));
+                Object obj = JSONValue.parse(EntityUtils.toString(entity1));
+                array = (JSONArray)obj;
+                
             EntityUtils.consume(entity1);
             response1.close();
         } catch (IOException ex) {
@@ -94,11 +96,7 @@ public class MusicIdentifier {
             Logger.getLogger(MusicIdentifier.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println(jsob.get("results"));
-        JSONArray jarray = new JSONArray(jsob.get("results"));
-        System.out.println(jarray.toString());
-        //jsob = new JSONObject(jsob.get("recordings"));
-        //System.out.println(jsob.toString());
+       System.out.println("The JSON array is: " + array.get(0));
         
     }
 }
