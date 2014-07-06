@@ -19,7 +19,7 @@ public class MusicCollector {
     
     Model model = Model.getInstance();
     public String path1;// = "C:\\Users\\Rafael\\Music\\stcb\\";
-
+    private int out;
     /**
      * This method should be called to set the directory from which the
      * user desires to obtain files.
@@ -40,13 +40,11 @@ public class MusicCollector {
         File[] listOfFiles = parent.listFiles();
         
         for (File listOfFile : listOfFiles) {
-            if (listOfFile.isDirectory()) {
-                folder = path + listOfFile.getName() + "\\";
-                //System.out.println(folder);
-                searchComp(folder);
-            } else {
-                folder = path;// + "\\";
-                searchFiles(folder);
+            out++;
+            folder = path + "\\";    
+            
+            searchFiles(folder);
+            if (listOfFile.isFile() || out != 1) {
                 break;
             }
         }
@@ -67,10 +65,13 @@ public class MusicCollector {
                 files = listOfFile.getName();
                 if (files.endsWith(".mp3") || files.endsWith(".wav") || files.endsWith(".flac") || files.endsWith(".m4a") || files.endsWith(".ogg") || files.endsWith(".aac")) {
                     //Change files into audiofiles and add them into a list
-                    MusicFile mf = new MusicFile(path + files);
+                    MusicFile mf = new MusicFile(files);
                     addToList(mf);
                     System.out.println(path + files);
                 }
+            }
+            else {
+                searchComp(listOfFile.getPath());
             }
         }
     }
