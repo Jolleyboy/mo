@@ -26,7 +26,7 @@ public class MusicFile {
     private Tag tag;                //The ID3 tag 
     private Path path;              //The Path to the music file
     private AudioHeader header;     //The header of the music file
-    private String duration;
+    private String duration = "?:??";
     private int id;
     /**
      * Constructor that takes an AudioFile
@@ -187,5 +187,29 @@ public class MusicFile {
     
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this){ 
+            return true;
+        }
+        if (!(other instanceof MusicFile))
+        {
+            return false;
+        }
+        
+        MusicFile mf = (MusicFile) other;
+        return (this.getArtist().equals(mf.getArtist()) &&
+                this.getTitle().equals(mf.getTitle()) &&
+                this.getAlbum().equals(mf.getAlbum()) &&
+                this.getGenre().equals(mf.getGenre()) &&
+                this.getDuration().equals(mf.getDuration()) &&
+                this.getPath().equals(mf.getPath()));
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

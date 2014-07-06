@@ -1,8 +1,15 @@
 package mo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import javafx.collections.ObservableList;
+import org.apache.commons.io.FileUtils;
+import static org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,5 +85,19 @@ public class MusicCollector {
         mfList.addAll(newFile);
         model.setList(mfList);
     }
+
     
+    
+    public void findAndAddFiles(File path) {
+        Collection<File> files = new ArrayList<File>();
+        ObservableList ol = model.getList();
+        String[] suffixes = {".mp3", ".wav", ".flac",".m4a", ".ogg", ".aac"};
+        for (String suffix : suffixes) {
+            files.addAll(FileUtils.listFiles(path,suffixFileFilter(suffix),TrueFileFilter.INSTANCE));
+        }
+        for (File file : files) {
+            ol.add(new MusicFile(file));
+        }
+        model.setList(ol);
+    }
 }

@@ -6,17 +6,13 @@
 
 package tests;
 
+import java.io.File;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mo.Model;
 import mo.MusicCollector;
 import mo.MusicFile;
 import org.testng.Assert;
-import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class musicCollectorTest {
@@ -31,27 +27,95 @@ public class musicCollectorTest {
     @Test
     public void searchCompTest() {
         MusicFile mf = new MusicFile("music\\seattle.mp3");
+        ObservableList<MusicFile> ol = FXCollections.observableArrayList();
+        model.setList(ol);
         mc.searchComp(path);
-        ObservableList<MusicFile> ol = model.getList();
+        ol = model.getList();
+        boolean fEquals = false;
         
         //for debugging.  Shows what files are in the list
         int numFiles = 0;
         for (MusicFile file : ol) {
             System.out.println("File number: " + ++numFiles);
-            System.out.println("Music File path: " + mf.getPath());
-            System.out.println("Music File title: " + mf.getTitle() + "\n");    
+            System.out.println("Music File path: " + file.getPath());
+            System.out.println("Music File title: " + file.getTitle() + "\n");    
         }
+        ///////////////////////////////////////////////////////////////////////
         
-        Assert.assertEquals(ol.contains(mf), true);
+        //Does it have seattle.mp3?
+        for (MusicFile file : ol) {
+            if (mf.equals(file)) {
+               fEquals = true; 
+            }   
+        }
+        Assert.assertEquals(fEquals, true);
+        
+        //Does it have crazy.mp3?
+        fEquals = false;
+        for (MusicFile file : ol) {
+            mf = new MusicFile("music\\crazy.mp3");
+            if (mf.equals(file)) {
+               fEquals = true; 
+            }   
+        }
+        Assert.assertEquals(fEquals, true);
+        
+        //Does it have drivemycar.mp3?
+        fEquals = false;
+        for (MusicFile file : ol) {
+            mf = new MusicFile("music\\otherMusic\\drivemycar.mp3");
+            if (mf.equals(file)) {
+               fEquals = true; 
+            }   
+        }
+        Assert.assertEquals(fEquals, true);
+        Assert.assertEquals(numFiles,3);
     }
     
     //once searchComp passes this test we'll be sure it's working
     @Test
     public void fullTest() {
-        mc.searchComp("music\\");
-        Assert.assertEquals(model.getList().contains(new MusicFile("music\\seattle.mp3")),true);
-        Assert.assertEquals(model.getList().contains(new MusicFile("music\\crazy.mp3")),true);
-        Assert.assertEquals(model.getList().contains(new MusicFile("music\\otherMusic\\drivemycar.mp3")),true);
+        ObservableList<MusicFile> ol = FXCollections.observableArrayList();
+        model.setList(ol);
+        mc.findAndAddFiles(new File("music\\"));
+        ol = model.getList();
+        boolean fEquals = false;
+        
+        //for debugging.  Shows what files are in the list
+        int numFiles = 0;
+        for (MusicFile file : ol) {
+            System.out.println("File number: " + ++numFiles);
+            System.out.println("Music File path: " + file.getPath());
+            System.out.println("Music File title: " + file.getTitle() + "\n");    
+        }
+        ////////////////////////////////////////////////////////////
+        
+        MusicFile mf = new MusicFile("music\\seattle.mp3");
+        for (MusicFile file : ol) {        
+            if (mf.equals(file)) {
+            fEquals = true; 
+            }   
+        }
+        Assert.assertEquals(fEquals, true);
+        
+        fEquals = false;      
+        mf = new MusicFile("music\\crazy.mp3");
+        for (MusicFile file : ol) {
+            if (mf.equals(file)) {
+               fEquals = true; 
+            }   
+        }
+        Assert.assertEquals(fEquals, true);
+        
+        fEquals = false;
+        mf = new MusicFile("music\\otherMusic\\drivemycar.mp3");
+        for (MusicFile file : ol) {
+            if (mf.equals(file)) {
+               fEquals = true; 
+            }   
+        }
+        Assert.assertEquals(fEquals, true);
+        Assert.assertEquals(numFiles,3);
     }
     
     //When you add it manually into a list and check, it works.
