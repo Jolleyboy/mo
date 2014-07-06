@@ -75,9 +75,14 @@ public class musicCollectorTest {
     //once searchComp passes this test we'll be sure it's working
     @Test
     public void fullTest() {
+        //create an empty list and set it to the model
         ObservableList<MusicFile> ol = FXCollections.observableArrayList();
         model.setList(ol);
+        
+        //run our test method
         mc.findAndAddFiles(new File("music\\"));
+        
+        //get the newly filled list
         ol = model.getList();
         boolean fEquals = false;
         
