@@ -44,7 +44,6 @@ public class Mo extends Application {
 
     private ObservableList<MusicFile> data = model.getList();
     
-    
     public Mo() { 
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
@@ -54,6 +53,7 @@ public class Mo extends Application {
     
     public MenuBar initMenus(Stage stage){
         MenuBar menuBar = new MenuBar();
+        
         // --- File Menu
         Menu menuFile = new Menu("File");
         
@@ -65,12 +65,9 @@ public class Mo extends Application {
                 File selectedDirectory = directoryChooser.showDialog(stage);
                 if (selectedDirectory != null) {
                     System.out.println("Scanning " + selectedDirectory.getPath());
-                    //mc.setPath(selectedDirectory.getPath());
                     System.out.println(selectedDirectory.getPath() + "\\");
-                    //System.out.println(mc.path);
                     try {
                         mc.searchComp(selectedDirectory.getPath() + "\\");
-                        
                     } catch (NullPointerException npe) {
                         npe.printStackTrace();
                         System.out.println("ERROR: Null Pointer Exception");
@@ -190,7 +187,7 @@ public class Mo extends Application {
     @Override
     public void start(Stage stage) {
         
-    	stage.setTitle("Music Organizer v1.2");
+    	stage.setTitle("Music Organizer v1.3");
         Scene scene = new Scene(new VBox(), 700, 550);
         
         table.setEditable(true);
@@ -199,13 +196,14 @@ public class Mo extends Application {
         
         initTable(); //INITIALIZE TABLE
         
-        data.add(new MusicFile("music\\seattle.mp3"));
-        data.add(new MusicFile("music\\crazy.mp3"));
+        //data.add(new MusicFile("music\\seattle.mp3"));
+        //data.add(new MusicFile("music\\crazy.mp3"));
         table.setItems(data);
         
         final VBox tbl = new VBox();
+        VBox.setVgrow(tbl, Priority.ALWAYS);
         tbl.setSpacing(5);
-        tbl.setPadding(new Insets(10, 10, 20, 10));
+        tbl.setPadding(new Insets(10, 10, 10, 10));
         tbl.getChildren().addAll(table);
         
         final VBox btns = new VBox();
@@ -277,7 +275,7 @@ public class Mo extends Application {
             vb.getChildren().addAll(hbs);
             btnbox2.getChildren().add(btn4);
             btnbox2.setAlignment(Pos.CENTER);
-            btnbox2.setPadding(new Insets(60, 10, 10, 10));
+            btnbox2.setPadding(new Insets(10, 10, 10, 10));
             vb.getChildren().addAll(btnbox2);
             scene2.setRoot(vb);
             stage2.show();
