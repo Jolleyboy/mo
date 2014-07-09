@@ -220,7 +220,7 @@ public class MusicFile {
         length %= 3600;
         int min = length / 60;
         int sec = length % 60;
-        String strLngth;
+        String strLngth = "";
         if (hr > 0) {
             strLngth = "" + hr + ":";
         }
