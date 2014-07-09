@@ -67,6 +67,7 @@ public class MusicFile {
             tag = af.getTag();//get the tag
             header = af.getAudioHeader();
             path = af.getFile().toPath();
+            duration = durationString(af);
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             logger.error(ex.getMessage());
         }
@@ -211,6 +212,20 @@ public class MusicFile {
     @Override
     public int hashCode() {
         return id;
+    }
+    
+    private String durationString(AudioFile af) {
+        int length = af.getAudioHeader().getTrackLength();       
+        int hr = length / 3600;
+        length %= 3600;
+        int min = length / 60;
+        int sec = length % 60;
+        String strLngth = "";
+        if (hr > 0) {
+            strLngth = "" + hr + ":";
+        }
+        strLngth += min + ":" + sec;
+        return strLngth;
     }
     
 }
