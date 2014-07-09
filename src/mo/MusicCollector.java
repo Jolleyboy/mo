@@ -73,9 +73,17 @@ public class MusicCollector {
      * @param newFile 
      */
     private void addToList(MusicFile newFile) {
+        boolean inList = false;
         ObservableList<MusicFile> mfList = model.getList();
-        mfList.addAll(newFile);
-        model.setList(mfList);
+        for (MusicFile check : mfList) {
+            System.out.println(check.getPath() + " " + newFile.getPath());
+            if (check.getPath().equals(newFile.getPath()))
+                inList = true;
+        }
+        if (inList == false) {
+            mfList.addAll(newFile);
+            model.setList(mfList);
+        }
     }
 
     
