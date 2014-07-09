@@ -18,17 +18,8 @@ public class MusicCollector {
     private Logger logger = LoggerFactory.getLogger(MusicCollector.class);
     
     Model model = Model.getInstance();
-    public String path1;// = "C:\\Users\\Rafael\\Music\\stcb\\";
     private int out;
-    /**
-     * This method should be called to set the directory from which the
-     * user desires to obtain files.
-     * @param newPath 
-     */
-    public void setPath(String newPath) {
-        path1 = newPath;
-    }
-    
+ 
     /**
      * This method will go down through the sub-folders in a recursive
      * manner and then calling searchFiles to obtain the files.
