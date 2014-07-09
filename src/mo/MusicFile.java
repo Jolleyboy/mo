@@ -3,6 +3,7 @@ package mo;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Level;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
@@ -28,6 +29,8 @@ public class MusicFile {
     private AudioHeader header;     //The header of the music file
     private String duration = "?:??";
     private int id;
+    private boolean fIdentified = false;
+    MusicIdentifier mi = new MusicIdentifier();
     /**
      * Constructor that takes an AudioFile
      * @param af 
@@ -36,6 +39,9 @@ public class MusicFile {
         tag = af.getTag();//get the tag
         header = af.getAudioHeader();
         path = af.getFile().toPath();
+        if (tag.getFirst(FieldKey.CUSTOM1) == "identified") {
+            fIdentified = true;
+        }
     }
     
     /**
@@ -51,6 +57,9 @@ public class MusicFile {
             path = af.getFile().toPath();
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             logger.error(ex.getMessage());
+        }
+        if (tag.getFirst(FieldKey.CUSTOM1) == "identified") {
+            fIdentified = true;
         }
     
     }
@@ -70,34 +79,13 @@ public class MusicFile {
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             logger.error(ex.getMessage());
         }
-    
-    }
-    
-    /**
-     * Build your own music file from a set of strings
-     * @param name
-     * @param artist
-     * @param album
-     * @param genre
-     * @param time 
-     */
-    public MusicFile(String name, String artist, String album, String genre, String time) {
-        File file = new File("music\\seattle.mp3");
-        AudioFile af = null;
-        try {
-            af = AudioFileIO.read(file);
-            tag = af.getTag();//get the tag
-            header = af.getAudioHeader();
-            path = af.getFile().toPath();
-        } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
-            logger.error(ex.getMessage());
+        if (tag.getFirst(FieldKey.CUSTOM1) == "identified") {
+            fIdentified = true;
         }
-        this.setTitle(name);
-        this.setArtist(artist);
-        this.setAlbum(album);
-        this.setGenre(genre);
-        this.duration = time;
+    
     }
+    
+    
     /**
      * Sets the artist for this music file's tag
      * @param artist 
@@ -167,6 +155,7 @@ public class MusicFile {
      */
     public String getAlbum(){
         return tag.getFirst(FieldKey.ALBUM);
+        
     }
     
     /**
@@ -211,5 +200,17 @@ public class MusicFile {
     @Override
     public int hashCode() {
         return id;
+    }
+    
+    public boolean isIdentified() {
+        return fIdentified;
+    } 
+    
+    public void setIdentified() {
+        try {
+            tag.setField(FieldKey.CUSTOM1, "identified");
+        } catch (KeyNotFoundException | FieldDataInvalidException ex) {
+            java.util.logging.Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

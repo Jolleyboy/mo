@@ -46,6 +46,9 @@ public class MusicIdentifier {
         ObservableList<MusicFile> newList = FXCollections.observableArrayList();
     
         for (MusicFile mf : ol) {
+            if (mf.isIdentified()) {
+                continue;
+            }
             parseJSON(identify(fingerprint(mf)),mf);
             newList.add(mf);
             try {
@@ -149,6 +152,8 @@ public class MusicIdentifier {
           
           System.out.println(artist.get("name"));
           mf.setArtist(artist.get("name").toString());
+          
+          mf.setIdentified();
     }
 }
 
