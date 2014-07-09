@@ -49,6 +49,7 @@ public class MusicFile {
             tag = af.getTag();//get the tag
             header = af.getAudioHeader();
             path = af.getFile().toPath();
+            duration = durationString(af);
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             logger.error(ex.getMessage());
         }
