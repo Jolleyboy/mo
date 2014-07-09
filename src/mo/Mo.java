@@ -5,6 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +24,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -40,24 +46,24 @@ public class Mo extends Application {
     private MusicCollector mc;
     private MusicIdentifier mi;
     private Logger logger = LoggerFactory.getLogger(Mo.class);
-    //private ObservableList<MusicFile> data = model.getList();
 
     private ObservableList<MusicFile> data = model.getList();
-    
     
     public Mo() { 
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         this.table = new TableView<>();
         mc = new MusicCollector();
+        mi = new MusicIdentifier();
     }
     
     public MenuBar initMenus(Stage stage){
         MenuBar menuBar = new MenuBar();
+        
         // --- File Menu
         Menu menuFile = new Menu("File");
         
-        MenuItem open = new MenuItem("Search for Music"); // -- Search Submenu
+        MenuItem open = new MenuItem("Add Folder to Library"); // -- Search Submenu
         open.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
@@ -65,12 +71,8 @@ public class Mo extends Application {
                 File selectedDirectory = directoryChooser.showDialog(stage);
                 if (selectedDirectory != null) {
                     System.out.println("Scanning " + selectedDirectory.getPath());
-                    //mc.setPath(selectedDirectory.getPath());
-                    System.out.println(selectedDirectory.getPath() + "\\");
-                    //System.out.println(mc.path);
                     try {
                         mc.searchComp(selectedDirectory.getPath() + "\\");
-                        
                     } catch (NullPointerException npe) {
                         npe.printStackTrace();
                         System.out.println("ERROR: Null Pointer Exception");
@@ -89,8 +91,16 @@ public class Mo extends Application {
  
         // --- Edit Menu
         Menu menuEdit = new Menu("Edit");
-        MenuItem edits = new MenuItem("Add"); // -- Edits Submenu
-        menuEdit.getItems().addAll(edits);
+        MenuItem identify = new MenuItem("Identify Music"); // -- Edits Submenu
+        identify.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    id();
+                }
+            
+        });
+        
+        menuEdit.getItems().addAll(identify);
         // ---
  
         // --- View Menu
@@ -108,8 +118,7 @@ public class Mo extends Application {
     public void initTable(){
         // NAME COLUMN
         TableColumn nameCol = new TableColumn("Name");
-        nameCol.setMinWidth(200);
-
+        nameCol.prefWidthProperty().bind(table.widthProperty().multiply(0.275));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("title"));
 
         nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -126,8 +135,7 @@ public class Mo extends Application {
         
        //ARTIST COLUMN
         TableColumn artistCol = new TableColumn("Artist");
-        artistCol.setMinWidth(150);
-
+        artistCol.prefWidthProperty().bind(table.widthProperty().multiply(0.2));
         artistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
 
         artistCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -144,8 +152,7 @@ public class Mo extends Application {
         
         //ALBUM COLUMN
         TableColumn albumCol = new TableColumn("Album");
-        albumCol.setMinWidth(175);
-
+        albumCol.prefWidthProperty().bind(table.widthProperty().multiply(0.275));
         albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
 
         albumCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -162,8 +169,7 @@ public class Mo extends Application {
         
         //GENRE COLUMN
         TableColumn genreCol = new TableColumn("Genre");
-        genreCol.setMinWidth(103);
-
+        genreCol.prefWidthProperty().bind(table.widthProperty().multiply(0.15));
         genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
 
         genreCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -180,46 +186,97 @@ public class Mo extends Application {
         
         //TIME COLUMN
         TableColumn timeCol = new TableColumn("Time");
-        timeCol.setMinWidth(50);
-
+        timeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.075));
         timeCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         
         table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
     };
     
+    public void id(){
+        final ProgressBar pb = new ProgressBar(1);
+        final ProgressIndicator pi = new ProgressIndicator(1);
+                
+        Stage stage2 = new Stage();
+        stage2.setTitle("Identifying");
+        Scene scene2 = new Scene(new VBox(), 550, 250);
+                
+        Button btn4 = new Button();
+        stage2.setScene(scene2);
+        stage2.show(); 
+                
+        final Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(50);
+                
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {   
+                pb.setProgress(new_val.doubleValue()/50);
+                pi.setProgress(new_val.doubleValue()/50);
+            }
+        });
+                
+        final VBox vb = new VBox();
+        final HBox btnbox2 = new HBox(20);
+        vb.setSpacing(5);
+        btn4.setText("Cancel");
+        btn4.setOnAction((ActionEvent t) -> {    
+            stage2.close();
+        });
+                
+        final HBox hb = new HBox();
+        hb.setSpacing(5);
+        hb.setAlignment(Pos.CENTER);
+        hb.getChildren().addAll(slider, pb, pi);
+        btnbox2.getChildren().add(btn4);
+        btnbox2.setAlignment(Pos.CENTER);
+        btnbox2.setPadding(new Insets(10, 10, 10, 10));
+        vb.getChildren().addAll(hb, btnbox2);
+        scene2.setRoot(vb);
+        stage2.show();
+                
+        mi.identifyNewSongs();
+        data = model.getList(); 
+    };
+    
     @Override
     public void start(Stage stage) {
         
-    	stage.setTitle("Music Organizer v1.2");
-        Scene scene = new Scene(new VBox(), 700, 550);
+    	stage.setTitle("Music Organizer v1.3");
+        stage.setWidth(700);
+        stage.setHeight(550);
+        
+        Scene scene = new Scene(new VBox());
         
         table.setEditable(true);
+        table.minHeight(800);
         
         MenuBar menuBar = initMenus(stage); //INITIALIZE MENUS
         
         initTable(); //INITIALIZE TABLE
         
-        data.add(new MusicFile("music\\seattle.mp3"));
-        data.add(new MusicFile("music\\crazy.mp3"));
+        //data.add(new MusicFile("music\\seattle.mp3"));
+        //data.add(new MusicFile("music\\crazy.mp3"));
         table.setItems(data);
         
         final VBox tbl = new VBox();
-        tbl.setSpacing(5);
-        tbl.setPadding(new Insets(10, 10, 20, 10));
+        VBox.setVgrow(tbl, Priority.ALWAYS);
+        tbl.setSpacing(0);
+        tbl.setPadding(new Insets(10, 10, 0, 10));
         tbl.getChildren().addAll(table);
         
         final VBox btns = new VBox();
         final HBox btnbox = new HBox(20);
-        VBox.setVgrow(btnbox, Priority.ALWAYS);
-        btns.setSpacing(10);
+        //VBox.setVgrow(btnbox, Priority.ALWAYS);
+        btns.setSpacing(0);
         btns.setPadding(new Insets(10, 10, 10, 10));
         
         Button btn1 = new Button();
-        btn1.setText("Null");
+        btn1.setText("*");
         btnbox.getChildren().add(btn1);
         
         Button btn2 = new Button();
-        btn2.setText("Load Examples");
+        btn2.setText("Example");
         btn2.setOnAction((ActionEvent t) -> {
             
 	});
@@ -227,60 +284,11 @@ public class Mo extends Application {
         btnbox.getChildren().add(btn2);
         
         Button btn3 = new Button();
-        btn3.setText("Music Scan");
+        btn3.setText("Identify Music Files");
         btn3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                final Float[] values = new Float[] {-1.0f};
-                final Label [] labels = new Label[values.length];
-                final ProgressBar[] pbs = new ProgressBar[values.length];
-                final ProgressIndicator[] pins = new ProgressIndicator[values.length];
-                final HBox hbs [] = new HBox [values.length];
-                
-                Stage stage2 = new Stage();
-                stage2.setTitle("Music Scan");
-                Scene scene2 = new Scene(new VBox(), 550, 250);
-                
-                Button btn4 = new Button();
-                stage2.setScene(scene2);
-                stage2.show(); 
-                
-                
-                
-                for (int i = 0; i < values.length; i++) {
-                    final Label label = labels[i] = new Label();
-                    label.setText("Scanning  ");
- 
-                    final ProgressBar pb = pbs[i] = new ProgressBar();
-                    pb.setProgress(values[i]);
- 
-                    final ProgressIndicator pin = pins[i] = new ProgressIndicator();
-                    pin.setProgress(values[i]);
-                    final HBox hb = hbs[i] = new HBox();
-                    hb.setSpacing(5);
-                    hb.setPadding(new Insets(60, 10, 10, 10));
-                    hb.setAlignment(Pos.CENTER);
-                    hb.getChildren().addAll(label, pb, pin);
-                }
-                
-                //mi.identifyNewSongs();
-                //data = model.getList();
-                
-                final VBox vb = new VBox();
-                final HBox btnbox2 = new HBox(20);
-                vb.setSpacing(5);
-                btn4.setText("Cancel");
-                btn4.setOnAction((ActionEvent t) -> {
-                    
-                });
-                
-            vb.getChildren().addAll(hbs);
-            btnbox2.getChildren().add(btn4);
-            btnbox2.setAlignment(Pos.CENTER);
-            btnbox2.setPadding(new Insets(60, 10, 10, 10));
-            vb.getChildren().addAll(btnbox2);
-            scene2.setRoot(vb);
-            stage2.show();
+                id();
             }
         });
         
