@@ -12,6 +12,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -193,32 +194,36 @@ public class Mo extends Application {
     };
     
     public void id(){
-        final ProgressBar pb = new ProgressBar(1);
-        final ProgressIndicator pi = new ProgressIndicator(1);
+        Task task = new Task<Void>() {
+            @Override public Void call() {
+                mi.identifyNewSongs();
+                data = model.getList(); 
+                updateProgress(1,1);
+                return null;
+            }
+        };
+        
+        ProgressBar bar = new ProgressBar();
+        ProgressIndicator pi = new ProgressIndicator();
+        bar.progressProperty().bind(task.progressProperty());
+        pi.progressProperty().bind(task.progressProperty());
+        new Thread(task).start();
                 
         Stage stage2 = new Stage();
-        stage2.setTitle("Identifying");
+        stage2.setTitle("Identify");
         Scene scene2 = new Scene(new VBox(), 550, 250);
                 
-        Button btn4 = new Button();
         stage2.setScene(scene2);
-        stage2.show(); 
-                
-        final Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(50);
-                
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {   
-                pb.setProgress(new_val.doubleValue()/50);
-                pi.setProgress(new_val.doubleValue()/50);
-            }
-        });
-                
+        stage2.show();  
+         
         final VBox vb = new VBox();
         final HBox btnbox2 = new HBox(20);
-        vb.setSpacing(5);
+        Label label = new Label();
+        label.setText("Identifying...");
+        vb.setSpacing(10);
+        vb.setPadding(new Insets(40, 10, 10, 10));
+        
+        Button btn4 = new Button();
         btn4.setText("Cancel");
         btn4.setOnAction((ActionEvent t) -> {    
             stage2.close();
@@ -227,7 +232,7 @@ public class Mo extends Application {
         final HBox hb = new HBox();
         hb.setSpacing(5);
         hb.setAlignment(Pos.CENTER);
-        hb.getChildren().addAll(slider, pb, pi);
+        hb.getChildren().addAll(label, bar, pi);
         btnbox2.getChildren().add(btn4);
         btnbox2.setAlignment(Pos.CENTER);
         btnbox2.setPadding(new Insets(10, 10, 10, 10));
@@ -235,8 +240,7 @@ public class Mo extends Application {
         scene2.setRoot(vb);
         stage2.show();
                 
-        mi.identifyNewSongs();
-        data = model.getList(); 
+        
     };
     
     @Override
