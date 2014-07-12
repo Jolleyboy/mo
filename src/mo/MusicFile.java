@@ -214,6 +214,7 @@ public class MusicFile {
         } catch (KeyNotFoundException | FieldDataInvalidException ex) {
             java.util.logging.Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
         }
+        fIdentified = true;
     }
     private String durationString(AudioFile af) {
         int length = af.getAudioHeader().getTrackLength();       

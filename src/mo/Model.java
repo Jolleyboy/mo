@@ -25,13 +25,7 @@ public class Model {
   private Model() {
     
      
-    //for testing purposes only!!!
-    listMF = FXCollections.observableArrayList(
-//            new MusicFile("TestTitle","TestArtist","TestAlbum","TestGenre","4:00Test"),
-//            new MusicFile("Paradise","Coldplay","Mylo Xyloto","Alternative","4:38"),
-//            new MusicFile("Somebody Told Me","The Killers","Hot Fuss","Alternative","3:17"),
-//            new MusicFile("It's Time","Imagine Dragons","Continued Silence","Indie Rock","3:59")
-        );
+    listMF = FXCollections.observableArrayList();
     //to prevent making seperate instances
   }
 

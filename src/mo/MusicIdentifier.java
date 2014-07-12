@@ -60,6 +60,11 @@ public class MusicIdentifier {
         model.setList(newList);
     }
    
+    /***   
+     * Fingerprints the music file using fpcalc
+     * @param mf
+     * @return 
+     */
     public String fingerprint(MusicFile mf) {
         String line = "";
         String fingerprint = "";
@@ -88,6 +93,11 @@ public class MusicIdentifier {
         return fingerprint;
     }
 
+    /***
+     * Identifies the music file based on the fingerprint returns a JSON obj
+     * @param fingerprint
+     * @return 
+     */
     public Object identify(String fingerprint) {
         try {
             String info[] = fingerprint.split(" ");
@@ -112,48 +122,48 @@ public class MusicIdentifier {
                 obj = parser.parse(EntityUtils.toString(entity1));
             EntityUtils.consume(entity1);
             response1.close();
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
-            ex.printStackTrace();
-        } catch (URISyntaxException ex) {
-            logger.error(ex.getMessage());
-            ex.printStackTrace();
-        } catch (ParseException ex) {
+        } catch (IOException | URISyntaxException | ParseException ex) {
             logger.error(ex.getMessage());
             ex.printStackTrace();
         }
         return obj;
     }
     
+    /***
+     * Parses the JSON into music file info.  
+     * @param obj
+     * @param mf 
+     */
     public void parseJSON(Object obj, MusicFile mf) {
-          JSONObject jsob = (JSONObject)obj;
-          System.out.println(jsob.toString());
-          JSONArray results = (JSONArray)jsob.get("results");
-          
-          
-          //print out everything
-          System.out.println(results.get(0));
-          JSONObject result = (JSONObject)(results.get(0));
-         
-          //get the recordings array
-          JSONArray recordingsArray = (JSONArray) result.get("recordings");
-          JSONObject recording = (JSONObject) recordingsArray.get(0);
-          int duration = Integer.parseInt(recording.get("duration").toString());
-          
-          //get the duration
-          System.out.println(duration/60 + ":" + duration%60);
-          mf.setDuration(duration/60 + ":" + duration%60);
-          //Get the title of the song
-          System.out.println(recording.get("title"));
-          mf.setTitle(recording.get("title").toString());
-          //get the artists
-          JSONArray artistsArray = (JSONArray)recording.get("artists");
-          JSONObject artist = (JSONObject) artistsArray.get(0);
-          
-          System.out.println(artist.get("name"));
-          mf.setArtist(artist.get("name").toString());
-          
-          mf.setIdentified();
+        JSONObject jsob = (JSONObject)obj;
+        System.out.println(jsob.toString());
+        JSONArray results = (JSONArray)jsob.get("results");
+
+        //print out everything
+        System.out.println(results.get(0));
+        JSONObject result = (JSONObject)(results.get(0));
+
+        //get the recordings array
+        JSONArray recordingsArray = (JSONArray) result.get("recordings");
+        JSONObject recording = (JSONObject) recordingsArray.get(0);
+        int duration = Integer.parseInt(recording.get("duration").toString());
+
+        //get the duration
+        System.out.println(duration/60 + ":" + duration%60);
+        mf.setDuration(duration/60 + ":" + duration%60);
+
+        //Get the title of the song
+        System.out.println(recording.get("title"));
+        mf.setTitle(recording.get("title").toString());
+
+        //get the artists
+        JSONArray artistsArray = (JSONArray)recording.get("artists");
+        JSONObject artist = (JSONObject) artistsArray.get(0);
+
+        System.out.println(artist.get("name"));
+        mf.setArtist(artist.get("name").toString());
+
+mf.setIdentified();
     }
 }
 
