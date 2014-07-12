@@ -30,6 +30,9 @@ public class MusicFile {
     private String duration = "?:??";
     private int id;
     private boolean fIdentified = false;
+    private Record record;
+    private boolean fDuplicates = false;
+    
     MusicIdentifier mi = new MusicIdentifier();
     /**
      * Constructor that takes an AudioFile
@@ -228,5 +231,21 @@ public class MusicFile {
         }
         strLngth += min + ":" + sec;
         return strLngth;
-    }    
+    }  
+    
+    public Record getRecord() {
+        return record;
+    }
+    
+    public void setRecord(Record record) {
+        this.record = record;
+    }
+    
+    public boolean getDuplicates() {
+        return fDuplicates;
+    }
+    
+    public void setDuplicates(boolean fDuplicates) {
+        this.fDuplicates = fDuplicates;
+    }
 }

@@ -6,45 +6,14 @@
 
 package mo;
 
+import java.util.ArrayList;
+
 /**
  * Class for holding records received from web service
  * @author Jolley
  */
 public class Record {
-    private String title;
-    private String artist;
-    private String duration;
-    private String album;
-    
-    public String getTitle() {
-        return title;
-    }
-    
-    public String getArtist() {
-        return artist;
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-    
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-    
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-    
-    public String getDuration() {
-        return duration;
-    }
-    
-    public String getAlbum() {
-        return album;
-    }
+    public ArrayList<String> titles;
+    public ArrayList<String> artists;
+    public ArrayList<String> albums;
 }

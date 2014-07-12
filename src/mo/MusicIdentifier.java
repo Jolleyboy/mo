@@ -141,29 +141,126 @@ public class MusicIdentifier {
 
         //print out everything
         System.out.println(results.get(0));
-        JSONObject result = (JSONObject)(results.get(0));
+//        JSONObject result = (JSONObject)(results.get(0));
+//
+//        //get the recordings array
+//        JSONArray recordingsArray = (JSONArray) result.get("recordings");
+//        JSONObject recording = (JSONObject) recordingsArray.get(0);
+//        int duration = Integer.parseInt(recording.get("duration").toString());
+//
+//        //get the duration
+//        System.out.println(duration/60 + ":" + duration%60);
+//        mf.setDuration(duration/60 + ":" + duration%60);
+//
+//        //Get the title of the song
+//        System.out.println(recording.get("title"));
+//        mf.setTitle(recording.get("title").toString());
+//
+//        //get the artists
+//        JSONArray artistsArray = (JSONArray)recording.get("artists");
+//        JSONObject artist = (JSONObject) artistsArray.get(0);
+//
+//        System.out.println(artist.get("name"));
+//        mf.setArtist(artist.get("name").toString());
 
-        //get the recordings array
-        JSONArray recordingsArray = (JSONArray) result.get("recordings");
-        JSONObject recording = (JSONObject) recordingsArray.get(0);
-        int duration = Integer.parseInt(recording.get("duration").toString());
-
-        //get the duration
-        System.out.println(duration/60 + ":" + duration%60);
-        mf.setDuration(duration/60 + ":" + duration%60);
-
-        //Get the title of the song
-        System.out.println(recording.get("title"));
-        mf.setTitle(recording.get("title").toString());
-
-        //get the artists
-        JSONArray artistsArray = (JSONArray)recording.get("artists");
-        JSONObject artist = (JSONObject) artistsArray.get(0);
-
-        System.out.println(artist.get("name"));
-        mf.setArtist(artist.get("name").toString());
-
-mf.setIdentified();
+        //create a new Record to hold all the information we're about to get
+        Record record = new Record();
+        
+        //Loop through every result catagory we got from the JSON
+        for (Object anObj : results) {
+            JSONObject result = (JSONObject)anObj;
+            JSONArray recordingsArray = (JSONArray) result.get("recordings");
+            
+            //Loop through every recording catagory we got from the JSON
+            for (Object anObj2 : recordingsArray) {
+                JSONObject recording = (JSONObject) anObj2;
+                boolean fContains = false;
+                JSONArray artistArray = (JSONArray)recording.get("artists");
+                
+                //loop through every artist catagory we got from the JSON
+                for (Object anObj3 : artistArray) {
+                    JSONObject artist = (JSONObject) anObj3;
+                    
+                    //check for duplicates, add if there are none.
+                    for (String str : record.artists) {
+                        if (str.trim().contains(artist.get("name").toString())){
+                            fContains = true;
+                        }
+                    }
+                    if (!fContains) {
+                        record.artists.add(artist.get("name").toString());
+                    }
+                }
+                
+                //Loop through every releaseGroup we got from the JSON
+                JSONArray releaseGroupsArray = (JSONArray)recording.get("releasegroups");
+                for (Object anObj4 : releaseGroupsArray) {
+                    JSONObject releaseGroup = (JSONObject) anObj4;
+                    artistArray = (JSONArray)releaseGroup.get("artists");
+                    
+                    //Loop through every artist in this section
+                    for (Object anObj3 : artistArray) {
+                        JSONObject artist = (JSONObject) anObj3;
+                        fContains = false;
+                        
+                        //check for duplicates, add if there are none.
+                        for (String str : record.artists) {
+                            if (str.trim().contains(artist.get("name").toString())){
+                                fContains = true;
+                            }
+                        }
+                        if (!fContains) {
+                            record.artists.add(artist.get("name").toString());
+                        }
+                    }
+                   
+                    //check for duplicate Albums, add if there are none
+                    fContains = false;
+                    for (String str : record.albums) {
+                        if (str.trim().contains(releaseGroup.get("title").toString())) {
+                            fContains = true;
+                        }
+                    }
+                    if (!fContains) {
+                        record.albums.add(releaseGroup.get("title").toString());
+                    }
+                }
+                fContains = false;
+                
+                //check for duplicate song titles, add if there are none
+                for (String str : record.titles) {
+                    if (str.trim().contains(recording.get("title").toString())) {
+                        fContains = true;
+                    }
+                }
+                if (!fContains) {
+                    record.titles.add(recording.get("title").toString());
+                }
+            }
+        }
+        
+        if (record.artists.size() == 1) {
+            mf.setArtist(record.artists.get(0));
+        } else if (record.artists.size() > 1) {
+            mf.setDuplicates(true);
+        }
+        
+        if (record.albums.size() == 1) {
+            mf.setAlbum(record.albums.get(0));
+        } else if (record.albums.size() > 1) {
+            mf.setDuplicates(true);
+        }
+        
+        if (record.titles.size() == 1) {
+            mf.setTitle(record.titles.get(0));
+        } else if (record.titles.size() > 1) {
+            mf.setDuplicates(true);
+        }
+        
+        
+        //Give this information to the MusicFile for use in the GUI
+        mf.setRecord(record);
+        mf.setIdentified();
     }
 }
 
