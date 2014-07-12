@@ -16,4 +16,10 @@ public class Record {
     public ArrayList<String> titles;
     public ArrayList<String> artists;
     public ArrayList<String> albums;
+
+    public Record() {
+        this.titles = new ArrayList<String>();
+        this.artists = new ArrayList<String>();
+        this.albums = new ArrayList<String>();
+    }
 }
