@@ -2,8 +2,10 @@ package mo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
@@ -19,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -46,6 +49,7 @@ public class Mo extends Application {
     private final Model model = Model.getInstance();
     private MusicCollector mc;
     private MusicIdentifier mi;
+    private MusicFile mf;
     private Logger logger = LoggerFactory.getLogger(Mo.class);
 
     private ObservableList<MusicFile> data = model.getList();
@@ -106,7 +110,7 @@ public class Mo extends Application {
  
         // --- View Menu
         Menu menuView = new Menu("View");
-        MenuItem changeview = new MenuItem("Change view"); // -- Change View Submenu
+        MenuItem changeview = new MenuItem("Update view"); // -- Change View Submenu
 
         menuView.getItems().addAll(changeview);
         // ---
@@ -187,11 +191,60 @@ public class Mo extends Application {
         
         //TIME COLUMN
         TableColumn timeCol = new TableColumn("Time");
-        timeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.075));
+        timeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.095));
         timeCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         
         table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
     };
+    
+    public void resolveDuplicates(){
+        for (MusicFile mf : data) {
+            System.out.println("parsing through list");
+            if (mf.fDuplicates){
+                System.out.println("duplicates found for: " 
+                        + mf.getTitle() + " - "
+                        + mf.getArtist() + " - " 
+                        + mf.getAlbum());
+                
+                Stage stage3 = new Stage();
+                stage3.setTitle("Resolve Duplicate Matches");
+                Scene scene3 = new Scene(new VBox(), 550, 150);
+                stage3.setScene(scene3);
+                stage3.show();
+                
+                final VBox vb1 = new VBox(10);
+                final HBox hb1 = new HBox(10);
+                final HBox hb2 = new HBox(10);
+                final HBox hb3 = new HBox(10);
+                
+                Label info = new Label();
+                info.setText("Original Info:          "
+                        + "" + mf.getTitle() + " - "
+                        + mf.getArtist() + " - " 
+                        + mf.getAlbum());
+                ComboBox tBox = new ComboBox(FXCollections.observableList(mf.record.titles));
+                ComboBox aBox = new ComboBox(FXCollections.observableList(mf.record.artists));
+                ComboBox alBox = new ComboBox(FXCollections.observableList(mf.record.albums));
+                
+                Button apply = new Button();
+                apply.setText("Apply Changes");
+                apply.setAlignment(Pos.CENTER);
+                
+                hb1.setAlignment(Pos.CENTER);
+                hb1.getChildren().addAll(tBox, aBox, alBox);
+                hb2.setAlignment(Pos.CENTER);
+                hb2.getChildren().addAll(info);
+                hb3.setAlignment(Pos.CENTER);
+                hb3.getChildren().addAll(apply);
+                vb1.setPadding(new Insets(40, 10, 10, 10));
+                vb1.getChildren().addAll(hb2, hb1, apply);
+                
+                scene3.setRoot(vb1);
+                scene3.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
+                stage3.show();
+            } 
+        }
+    }
     
     public void id(){
         Task task = new Task<Void>() {
@@ -224,7 +277,7 @@ public class Mo extends Application {
         vb.setPadding(new Insets(40, 10, 10, 10));
         
         Button btn4 = new Button();
-        btn4.setText("Cancel");
+        btn4.setText("Close");
         btn4.setOnAction((ActionEvent t) -> {    
             stage2.close();
         });
@@ -238,15 +291,14 @@ public class Mo extends Application {
         btnbox2.setPadding(new Insets(10, 10, 10, 10));
         vb.getChildren().addAll(hb, btnbox2);
         scene2.setRoot(vb);
-        stage2.show();
-                
-        
+        scene2.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
+        stage2.show();  
     };
     
     @Override
     public void start(Stage stage) {
         
-    	stage.setTitle("Music Organizer v1.3");
+    	stage.setTitle("Music Organizer v1.4");
         stage.setWidth(700);
         stage.setHeight(550);
         
@@ -259,8 +311,6 @@ public class Mo extends Application {
         
         initTable(); //INITIALIZE TABLE
         
-        //data.add(new MusicFile("music\\seattle.mp3"));
-        //data.add(new MusicFile("music\\crazy.mp3"));
         table.setItems(data);
         
         final VBox tbl = new VBox();
@@ -276,16 +326,22 @@ public class Mo extends Application {
         btns.setPadding(new Insets(10, 10, 10, 10));
         
         Button btn1 = new Button();
-        btn1.setText("*");
-        btnbox.getChildren().add(btn1);
-        
-        Button btn2 = new Button();
-        btn2.setText("Example");
-        btn2.setOnAction((ActionEvent t) -> {
-            
-	});
-        
-        btnbox.getChildren().add(btn2);
+        btn1.setText("Add Folder to Library");
+        btn1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                final DirectoryChooser directoryChooser = new DirectoryChooser();
+                File selectedDirectory = directoryChooser.showDialog(stage);
+                if (selectedDirectory != null) {
+                    System.out.println("Scanning " + selectedDirectory.getPath());
+                    try {
+                        mc.searchComp(selectedDirectory.getPath() + "\\");
+                    } catch (NullPointerException npe) {
+                        System.out.println("ERROR: Null Pointer Exception");
+                    }
+                }
+            }
+        });
         
         Button btn3 = new Button();
         btn3.setText("Identify Music Files");
@@ -296,13 +352,26 @@ public class Mo extends Application {
             }
         });
         
+        Button btn2 = new Button();
+        btn2.setText("Resolve Duplicates");
+        btn2.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent t) {
+                    resolveDuplicates();
+                }
+            });
+        
+        btnbox.getChildren().add(btn1);
         btnbox.getChildren().add(btn3);
+        btnbox.getChildren().add(btn2);
         
         btns.getChildren().addAll(btnbox);
         
         ((VBox) scene.getRoot()).getChildren().addAll(menuBar, tbl, btns);
        
+        //scene.getStylesheets().add(Mo.class.getResource("Style//Mo.css").toExternalForm());
         stage.setScene(scene);
+        scene.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
         stage.show();
     }
 
