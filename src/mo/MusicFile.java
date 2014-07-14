@@ -32,6 +32,7 @@ public class MusicFile {
     private boolean fIdentified = false;
     Record record;
     boolean fDuplicates = false;
+    private String newPath;
     
     MusicIdentifier mi = new MusicIdentifier();
     /**
@@ -247,5 +248,13 @@ public class MusicFile {
     
     public void setDuplicates(boolean fDuplicates) {
         this.fDuplicates = fDuplicates;
+    }
+    
+    public void setNewPath(String newPath) {
+        this.newPath = newPath;
+    }
+    
+    public String getNewPath() {
+        return newPath;
     }
 }

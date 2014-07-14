@@ -106,16 +106,16 @@ public class MusicIdentifier {
                     .setHost("api.acoustid.org")
                     .setPath("/v2/lookup")
                     .setParameter("client", "wDj2TMtS")
-                    .setParameter("meta","recordings")
+                    .setParameter("meta","recordings+releasegroups")
                     .setParameter("duration",info[0])
                     .setParameter("fingerprint", info[1])
                     .build();
 //            
-//            String url = uri.toString();
-//            url = url.replace("%2B", "+");
+            String url = uri.toString();
+            url = url.replace("%2B", "+");
             
             CloseableHttpClient httpclient = HttpClients.createDefault();
-            HttpGet httpGet = new HttpGet(uri);
+            HttpGet httpGet = new HttpGet(url);
             CloseableHttpResponse response1 = httpclient.execute(httpGet);
             System.out.println(response1.getStatusLine());
             HttpEntity entity1 = response1.getEntity();
