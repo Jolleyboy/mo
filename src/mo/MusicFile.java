@@ -30,8 +30,8 @@ public class MusicFile {
     private String duration = "?:??";
     private int id;
     private boolean fIdentified = false;
-    private Record record;
-    private boolean fDuplicates = false;
+    Record record;
+    boolean fDuplicates = false;
     
     MusicIdentifier mi = new MusicIdentifier();
     /**
