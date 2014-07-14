@@ -1,0 +1,62 @@
+.root {
+    -fx-background-image: url("bg.png");
+}
+
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #FAFAFA;
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-background-color: #2A5058;
+}
+
+.button:hover {
+    -fx-background-color: #61a2b1;
+}
+
+.table-view {
+    -fx-background-color:#666666;
+}
+
+.menu-bar {
+    -fx-background-color:#333333;
+    -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-background-color:#333333;
+    -fx-text-fill: black;
+}
+
+.table-column {
+    -fx-background-color:#333333;
+    -fx-text-fill: white;
+}
+
+.table-row {
+    -fx-background-color:#333333;
+    -fx-text-fill: white;
+}
+
+.context-menu {
+    -fx-background-image: url("bg1.jpg");
+    -fx-background-color:#333333;
+}
+
+.context-menu:focused {
+    -fx-background-color:#333333;
+}
+
+.menu-item:focused {
+    -fx-background-color:grey;
+    -fx-focus-color:black;
+}
+
+.menu:focused {
+    -fx-background-color:grey;
+    -fx-focus-color:black;
+}
