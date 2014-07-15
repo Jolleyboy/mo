@@ -10,6 +10,7 @@ import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -34,6 +35,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -82,6 +84,7 @@ public class Mo extends Application {
                         npe.printStackTrace();
                         System.out.println("ERROR: Null Pointer Exception");
                     }
+                    updateTable();
                 }
             }
         });
@@ -96,23 +99,50 @@ public class Mo extends Application {
  
         // --- Edit Menu
         Menu menuEdit = new Menu("Edit");
-        MenuItem identify = new MenuItem("Identify Music"); // -- Edits Submenu
+        MenuItem identify = new MenuItem("Identify Music"); // -- 
         identify.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     id();
+                    updateTable();
                 }
             
         });
         
-        menuEdit.getItems().addAll(identify);
+        MenuItem rd = new MenuItem("Resolve Duplicates"); // -- 
+        rd.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    resolveDuplicates();
+                    updateTable();
+                }
+            
+        });
+        
+        menuEdit.getItems().addAll(identify, rd);
         // ---
  
         // --- View Menu
         Menu menuView = new Menu("View");
-        MenuItem changeview = new MenuItem("Update view"); // -- Change View Submenu
-
-        menuView.getItems().addAll(changeview);
+        MenuItem update = new MenuItem("Update Library");
+        update.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    updateTable();
+                }
+            
+        });
+        
+        MenuItem reset = new MenuItem("Erase Library");
+        reset.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    resetTable();
+                }
+            
+        });
+        
+        menuView.getItems().addAll(update, reset);
         // ---
         
         menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
@@ -123,7 +153,7 @@ public class Mo extends Application {
     public void initTable(){
         // NAME COLUMN
         TableColumn nameCol = new TableColumn("Name");
-        nameCol.prefWidthProperty().bind(table.widthProperty().multiply(0.275));
+        nameCol.prefWidthProperty().bind(table.widthProperty().multiply(0.267));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("title"));
 
         nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -157,7 +187,7 @@ public class Mo extends Application {
         
         //ALBUM COLUMN
         TableColumn albumCol = new TableColumn("Album");
-        albumCol.prefWidthProperty().bind(table.widthProperty().multiply(0.275));
+        albumCol.prefWidthProperty().bind(table.widthProperty().multiply(0.25));
         albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
 
         albumCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -191,7 +221,7 @@ public class Mo extends Application {
         
         //TIME COLUMN
         TableColumn timeCol = new TableColumn("Time");
-        timeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.095));
+        timeCol.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
         timeCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         
         table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
@@ -208,7 +238,7 @@ public class Mo extends Application {
                 
                 Stage stage3 = new Stage();
                 stage3.setTitle("Resolve Duplicate Matches");
-                Scene scene3 = new Scene(new VBox(), 550, 150);
+                Scene scene3 = new Scene(new VBox(), 650, 150);
                 stage3.setScene(scene3);
                 stage3.show();
                 
@@ -225,9 +255,20 @@ public class Mo extends Application {
                 ComboBox tBox = new ComboBox(FXCollections.observableList(mf.record.titles));
                 ComboBox aBox = new ComboBox(FXCollections.observableList(mf.record.artists));
                 ComboBox alBox = new ComboBox(FXCollections.observableList(mf.record.albums));
-                
+               
                 Button apply = new Button();
                 apply.setText("Apply Changes");
+                apply.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println(tBox.getValue().toString());
+                        mf.setTitle(tBox.getValue().toString());
+                        mf.setArtist(aBox.getValue().toString());
+                        mf.setAlbum(alBox.getValue().toString());
+                        stage3.close();
+                        updateTable();
+                    }
+                });
                 apply.setAlignment(Pos.CENTER);
                 
                 hb1.setAlignment(Pos.CENTER);
@@ -237,7 +278,7 @@ public class Mo extends Application {
                 hb3.setAlignment(Pos.CENTER);
                 hb3.getChildren().addAll(apply);
                 vb1.setPadding(new Insets(40, 10, 10, 10));
-                vb1.getChildren().addAll(hb2, hb1, apply);
+                vb1.getChildren().addAll(hb2, hb1, hb3);
                 
                 scene3.setRoot(vb1);
                 scene3.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
@@ -247,7 +288,9 @@ public class Mo extends Application {
     }
     
     public void id(){
-        Task task = new Task<Void>() {
+        
+        Task task;
+        task = new Task<Void>() {
             @Override public Void call() {
                 mi.identifyNewSongs();
                 data = model.getList(); 
@@ -264,7 +307,7 @@ public class Mo extends Application {
                 
         Stage stage2 = new Stage();
         stage2.setTitle("Identify");
-        Scene scene2 = new Scene(new VBox(), 550, 250);
+        Scene scene2 = new Scene(new VBox(), 550, 200);
                 
         stage2.setScene(scene2);
         stage2.show();  
@@ -295,33 +338,39 @@ public class Mo extends Application {
         stage2.show();  
     };
     
+    public void updateTable() {
+        table.getItems().clear();
+        table.setItems(FXCollections.observableArrayList(data));
+    }
+    
+    public void resetTable() {
+        //table.getItems().clear();
+        //data = null;
+        //table.setItems(FXCollections.observableArrayList(data));
+    }
+    
     @Override
     public void start(Stage stage) {
         
-    	stage.setTitle("Music Organizer v1.4");
-        stage.setWidth(700);
-        stage.setHeight(550);
+    	stage.setTitle("Music Organizer v2.0");
+        stage.setWidth(800);
+        stage.setHeight(650);
         
         Scene scene = new Scene(new VBox());
         
         table.setEditable(true);
-        table.minHeight(800);
+        table.prefHeight(300);
         
         MenuBar menuBar = initMenus(stage); //INITIALIZE MENUS
         
         initTable(); //INITIALIZE TABLE
+        updateTable();
         
-        table.setItems(data);
-        
-        final VBox tbl = new VBox();
-        VBox.setVgrow(tbl, Priority.ALWAYS);
-        tbl.setSpacing(0);
-        tbl.setPadding(new Insets(10, 10, 0, 10));
-        tbl.getChildren().addAll(table);
+        VBox.setVgrow(table, Priority.ALWAYS);
+        table.setPadding(new Insets(10, 10, 0, 10));
         
         final VBox btns = new VBox();
         final HBox btnbox = new HBox(20);
-        //VBox.setVgrow(btnbox, Priority.ALWAYS);
         btns.setSpacing(0);
         btns.setPadding(new Insets(10, 10, 10, 10));
         
@@ -339,6 +388,7 @@ public class Mo extends Application {
                     } catch (NullPointerException npe) {
                         System.out.println("ERROR: Null Pointer Exception");
                     }
+                    updateTable();
                 }
             }
         });
@@ -349,27 +399,47 @@ public class Mo extends Application {
             @Override
             public void handle(ActionEvent event) {
                 id();
+                updateTable();
             }
         });
         
         Button btn2 = new Button();
         btn2.setText("Resolve Duplicates");
         btn2.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent t) {
-                    resolveDuplicates();
-                }
-            });
+            @Override
+            public void handle(ActionEvent t) {
+                resolveDuplicates();
+                updateTable();
+            }
+        });
+        
+        Button btn4 = new Button();
+        btn4.setText("Save to Folders");
+        btn4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                //saveFile
+            }
+        });
+        
+        final HBox btnboxR = new HBox(20);
+        btnboxR.getChildren().add(btn4);
+        btnboxR.setAlignment(Pos.CENTER_RIGHT);
+        btn4.setAlignment(Pos.CENTER_RIGHT);
+        btnbox.setAlignment(Pos.CENTER_LEFT);
         
         btnbox.getChildren().add(btn1);
         btnbox.getChildren().add(btn3);
         btnbox.getChildren().add(btn2);
+        btns.getChildren().add(btnbox);
+        btns.getChildren().add(btnboxR);
         
-        btns.getChildren().addAll(btnbox);
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, table, btns);
         
-        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, tbl, btns);
-       
-        //scene.getStylesheets().add(Mo.class.getResource("Style//Mo.css").toExternalForm());
+        Image applicationIcon;
+        applicationIcon = new Image(getClass().getResourceAsStream("Style/icon3.png"));
+        stage.getIcons().add(applicationIcon);
+        
         stage.setScene(scene);
         scene.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
         stage.show();
