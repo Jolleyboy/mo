@@ -2,6 +2,8 @@ package mo;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import org.jaudiotagger.audio.AudioFile;
@@ -324,5 +326,15 @@ public class MusicFile {
      */
     public Tag getTag() {
         return tag;
+    }
+    
+    public String callMethod(String methodName) {
+    try {
+        Method  method = this.getClass().getDeclaredMethod (methodName, null);
+        return method.invoke (this,null).toString();
+    } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        java.util.logging.Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
     }
 }
