@@ -250,9 +250,11 @@ public class MusicFile {
     }
     
     /**
-     * Rafael: Setter for duration
-     * @param af
-     * @return 
+     * Rafael: This method will obtain the duration of the audio file and convert it
+     * in a hr:min:sec format as a string.
+     * @param af - It will receive an audio file as parameter to get the time in
+     *              seconds
+     * @return - It will return a string of the time.
      */
     private String durationString(AudioFile af) {
         int length = af.getAudioHeader().getTrackLength();       
