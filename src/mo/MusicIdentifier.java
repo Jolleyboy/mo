@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mo;
 
 import java.io.BufferedReader;
@@ -30,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
+ * Identify ID3 tag information for the MusicFiles in the model
  * @author Joshua
  */
 public class MusicIdentifier {
@@ -40,19 +35,27 @@ public class MusicIdentifier {
     Object obj;
     JSONParser parser = new JSONParser();
           
-  
+    /**
+     * Gets ID3 information for files that haven't already been identified
+     */
     public void identifyNewSongs() {
         ObservableList<MusicFile> ol = model.getList();
         ObservableList<MusicFile> newList = FXCollections.observableArrayList();
     
         for (MusicFile mf : ol) {
+            //check if we've already identified the file or not
             if (mf.isIdentified()) {
                 continue;
             }
+            //this calls all 3 functions in this class
+            //it fingerprints, sends that fingerprint to identifiy, and then
+            //parses the JSON we get back
             parseJSON(identify(fingerprint(mf)),mf);
+            
+            //add the identified file to a new list
             newList.add(mf);
             try {
-                Thread.sleep(400); //Only 3 requests per second
+                Thread.sleep(350); //Only 3 requests per second
             } catch (InterruptedException ex) {
                 Logger.getLogger(MusicIdentifier.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -61,11 +64,14 @@ public class MusicIdentifier {
     }
    
     /***   
-     * Fingerprints the music file using fpcalc
+     * Fingerprints the music file using fpcalc.exe
      * @param mf
      * @return 
      */
     public String fingerprint(MusicFile mf) {
+        
+        //these are used to parse the information we're getting back
+        //it could be done more elegantly
         String line = "";
         String fingerprint = "";
         String[] info;
@@ -73,6 +79,7 @@ public class MusicIdentifier {
         ArrayList<String> theInfo = new ArrayList<String>();
         String fpcalc = "lib\\fp\\fpcalc.exe";
             
+        //try with resources closes the readers for you! 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new ProcessBuilder(fpcalc,mf.getPath()).start().getInputStream()))){
             while ((line = br.readLine()) != null) {
                 fingerprint += line + "\n";
@@ -84,22 +91,26 @@ public class MusicIdentifier {
             return fingerprint;
         }
         
+        //the format is "DURATION=167 FINGERPRINT=REALLY_BIG_STRING"
         info = fingerprint.split("\n");
         temp = info[1].split("=");
         theInfo.add(temp[1]);
         temp = info[2].split("=");
         theInfo.add(temp[1]);
         fingerprint = theInfo.get(0) + " " + theInfo.get(1);
+        //The final fingerprint is "167 REALLY_BIG_STRING"
         return fingerprint;
     }
 
     /***
-     * Identifies the music file based on the fingerprint returns a JSON obj
+     * Identifies the music file based on the fingerprint.
+     * Returns a JSON object
      * @param fingerprint
      * @return 
      */
     public Object identify(String fingerprint) {
         try {
+            //this builds our GET request for us
             String info[] = fingerprint.split(" ");
             URI uri = new URIBuilder()
                     .setScheme("http")
@@ -110,15 +121,18 @@ public class MusicIdentifier {
                     .setParameter("duration",info[0])
                     .setParameter("fingerprint", info[1])
                     .build();
-//            
+//          
+            //The Web Service expects actual '+' signs instead of %2B
             String url = uri.toString();
             url = url.replace("%2B", "+");
             
+            //This makes the git request for us
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             CloseableHttpResponse response1 = httpclient.execute(httpGet);
             System.out.println(response1.getStatusLine());
             HttpEntity entity1 = response1.getEntity();
+                //this is the object we get back from the request
                 obj = parser.parse(EntityUtils.toString(entity1));
             EntityUtils.consume(entity1);
             response1.close();
@@ -130,7 +144,7 @@ public class MusicIdentifier {
     }
     
     /***
-     * Parses the JSON into music file info.  
+     * Parses the JSON into music file info using simple JSON.  
      * @param obj
      * @param mf 
      */
@@ -141,27 +155,6 @@ public class MusicIdentifier {
         if (results != null) {
             //print out everything
             System.out.println(results.get(0));
-    //        JSONObject result = (JSONObject)(results.get(0));
-    //
-    //        //get the recordings array
-    //        JSONArray recordingsArray = (JSONArray) result.get("recordings");
-    //        JSONObject recording = (JSONObject) recordingsArray.get(0);
-    //        int duration = Integer.parseInt(recording.get("duration").toString());
-    //
-    //        //get the duration
-    //        System.out.println(duration/60 + ":" + duration%60);
-    //        mf.setDuration(duration/60 + ":" + duration%60);
-    //
-    //        //Get the title of the song
-    //        System.out.println(recording.get("title"));
-    //        mf.setTitle(recording.get("title").toString());
-    //
-    //        //get the artists
-    //        JSONArray artistsArray = (JSONArray)recording.get("artists");
-    //        JSONObject artist = (JSONObject) artistsArray.get(0);
-    //
-    //        System.out.println(artist.get("name"));
-    //        mf.setArtist(artist.get("name").toString());
 
             //create a new Record to hold all the information we're about to get
             Record record = new Record();
@@ -256,19 +249,23 @@ public class MusicIdentifier {
                 ex.getMessage();
                 ex.printStackTrace();
             }
-
+            
+            //If we only have one available option, just set it!
+            //otherwise, mark the file for user duplicate resolving
             if (record.artists.size() == 1) {
                 mf.setArtist(record.artists.get(0));
             } else if (record.artists.size() > 1) {
                 mf.setDuplicates(true);
             }
 
+            //same as above
             if (record.albums.size() == 1) {
                 mf.setAlbum(record.albums.get(0));
             } else if (record.albums.size() > 1) {
                 mf.setDuplicates(true);
             }
-
+            
+            //same as above
             if (record.titles.size() == 1) {
                 mf.setTitle(record.titles.get(0));
             } else if (record.titles.size() > 1) {

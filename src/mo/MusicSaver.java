@@ -20,12 +20,19 @@ import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
 
 /**
- *
+ * Saves the changes we've made to the MusicFile to the hard drive following
+ * A user specified file name and folder structure
  * @author Jolley
  */
 public class MusicSaver {
+    /**
+     * Change the name of the file based on attributes
+     * @param mf
+     * @param attributes 
+     */
     public void changeFilename(MusicFile mf, String[] attributes) {
         String name = "";
+        //add each attribute to the name of the file
         for (int i = 0; i < attributes.length; i++) {
             name += attributes[i];
             if (i != attributes.length - 1) {
@@ -35,28 +42,36 @@ public class MusicSaver {
         mf.setNewName(name);
     }
     
-    
+    /**
+     * Save each file following the attribute list
+     * @param attributes
+     * @param topDirectory 
+     */
     public void saveFiles(String[] attributes, File topDirectory) {
         Model model = Model.getInstance();
         ObservableList<MusicFile> ol = model.getList();
         String name = "";
+        
+        //loop through each music file in the model
         for (MusicFile mf : ol) {
             for (int i = 0; i < attributes.length; i++) {
-                name += attributes[i] + "/";
+                // call each method as appropriate
+                //name += attributes[i] + "/";
             }
             //save the tag info
             File file = new File(mf.getPath());
             AudioFile af;
             try {
                 af = AudioFileIO.read(file);
-                af.setTag(mf.getTag());
-                af.commit();
+                af.setTag(mf.getTag()); //write the tag we've been working with
+                af.commit(); //commit writes the tag to the actual file
             } catch (CannotReadException | IOException | TagException |
                      ReadOnlyFileException | InvalidAudioFrameException |
                      CannotWriteException ex) {
                 ex.getMessage();
                 ex.printStackTrace();
             }
+            //creates a new file in the approrpriate place
             file.renameTo(new File(topDirectory.getAbsolutePath() + name + mf.getNewName()));
         }
     }
