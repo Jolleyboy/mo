@@ -2,6 +2,8 @@ package mo;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import org.jaudiotagger.audio.AudioFile;
@@ -27,22 +29,23 @@ public class MusicFile {
     private Tag tag;                //The ID3 tag 
     private Path path;              //The Path to the music file
     private AudioHeader header;     //The header of the music file
-    private String duration = "?:??";
-    private int id;
-    private boolean fIdentified = false;
-    Record record;
-    boolean fDuplicates = false;
-    private String newName;
+    private String duration = "?:??";//Duration of the song
+    private int id;                 //private ID number 
+    private boolean fIdentified = false; //has the song been identified yet?
+    Record record;                  // Where we store duplicate information
+    boolean fDuplicates = false;    // Is ther eany duplicate information stored?
+    private String newName;         //What we plan to change the name to
     
-    MusicIdentifier mi = new MusicIdentifier();
     /**
      * Constructor that takes an AudioFile
      * @param af 
      */
     public MusicFile(AudioFile af) {
         tag = af.getTag();//get the tag
-        header = af.getAudioHeader();
-        path = af.getFile().toPath();
+        header = af.getAudioHeader(); //get the header
+        path = af.getFile().toPath(); //get the path to the file
+        
+        //Check if this file has already been identified or not
         if (tag.getFirst(FieldKey.CUSTOM1) == "identified") {
             fIdentified = true;
         }
@@ -55,14 +58,15 @@ public class MusicFile {
     public MusicFile(File file) {
         AudioFile af;
         try {
-            af = AudioFileIO.read(file);
+            af = AudioFileIO.read(file); //read in the audio file
             tag = af.getTag();//get the tag
-            header = af.getAudioHeader();
-            path = af.getFile().toPath();
-            duration = durationString(af);
+            header = af.getAudioHeader(); //get the header
+            path = af.getFile().toPath(); //get the path
+            duration = durationString(af); //set the duration
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             logger.error(ex.getMessage());
         }
+        //check if it's been identified or not
         if (tag.getFirst(FieldKey.CUSTOM1) == "identified") {
             fIdentified = true;
         }
@@ -104,6 +108,10 @@ public class MusicFile {
         }
     }
     
+    /**
+     * getter for Path
+     * @return 
+     */
     public String getPath() {
         return path.toString();
     }
@@ -176,15 +184,26 @@ public class MusicFile {
         }
     }
     
+    /**
+     * getter for duration
+     * @return 
+     */
     public String getDuration() {
         return duration;
     }
     
+    /**
+     * setter for duration
+     * @param duration 
+     */
     public void setDuration(String duration) {
         this.duration = duration;
     }
 
     @Override
+    /**
+     * .equals override 
+     */
     public boolean equals(Object other) {
         if (other == this){ 
             return true;
@@ -203,15 +222,26 @@ public class MusicFile {
                 this.getPath().equals(mf.getPath()));
     }
 
+    /**
+     * Override for hashCode
+     * @return 
+     */
     @Override
     public int hashCode() {
         return id;
     }
     
+    /**
+     * getter for Identified
+     * @return 
+     */
     public boolean isIdentified() {
         return fIdentified;
     } 
     
+    /**
+     * setter for Identified (always sets true)
+     */
     public void setIdentified() {
         try {
             tag.setField(FieldKey.CUSTOM1, "identified");
@@ -220,6 +250,14 @@ public class MusicFile {
         }
         fIdentified = true;
     }
+    
+    /**
+     * Rafael: This method will obtain the duration of the audio file and convert it
+     * in a hr:min:sec format as a string.
+     * @param af - It will receive an audio file as parameter to get the time in
+     *              seconds
+     * @return - It will return a string of the time.
+     */
     private String durationString(AudioFile af) {
         int length = af.getAudioHeader().getTrackLength();       
         int hr = length / 3600;
@@ -234,31 +272,69 @@ public class MusicFile {
         return strLngth;
     }  
     
+    /**
+     * getter for Record
+     * @return 
+     */
     public Record getRecord() {
         return record;
     }
     
+    /**
+     * setter for Record
+     * @param record 
+     */
     public void setRecord(Record record) {
         this.record = record;
     }
     
+    /**
+     * getter for fDuplicates
+     * @return 
+     */
     public boolean getDuplicates() {
         return fDuplicates;
     }
     
+    /**
+     * setter for fDuplicates
+     * @param fDuplicates 
+     */
     public void setDuplicates(boolean fDuplicates) {
         this.fDuplicates = fDuplicates;
     }
     
+    /**
+     * setter for newName
+     * @param newName 
+     */
     public void setNewName(String newName) {
         this.newName = newName;
     }
     
+    /**
+     * getter for NewName
+     * @return 
+     */
     public String getNewName() {
         return newName;
     }
     
+    /**
+     * getter for getTag
+     * @return 
+     */
     public Tag getTag() {
         return tag;
+    }
+    
+    public String callMethod(String methodName) {
+    try {
+        Method  method = this.getClass().getDeclaredMethod (methodName, null);
+        return method.invoke (this,null).toString();
+    } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        java.util.logging.Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
     }
 }
