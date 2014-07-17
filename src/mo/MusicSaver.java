@@ -30,16 +30,20 @@ public class MusicSaver {
      * @param mf
      * @param attributes 
      */
-    public void changeFilename(MusicFile mf, String[] attributes) {
-        String name = "";
-        //add each attribute to the name of the file
-        for (int i = 0; i < attributes.length; i++) {
-            name += attributes[i];
-            if (i != attributes.length - 1) {
-                name += " - ";
+    public void changeFilename(String[] attributes) {
+        ObservableList<MusicFile> ol = Model.getInstance().getList();
+        for (MusicFile mf :  ol) {
+            String name = "";
+            //add each attribute to the name of the file
+            for (int i = 0; i < attributes.length; i++) {
+                name += mf.callMethod("get" + attributes[i]);
+                if (i != attributes.length - 1) {
+                    name += " - ";
+                }
             }
+            mf.setNewName(name);
         }
-        mf.setNewName(name);
+        Model.getInstance().setList(ol);
     }
     
     /**
@@ -54,9 +58,9 @@ public class MusicSaver {
         
         //loop through each music file in the model
         for (MusicFile mf : ol) {
+            name = "";
             for (int i = 0; i < attributes.length; i++) {
-                // call each method as appropriate
-                //name += attributes[i] + "/";
+                name += mf.callMethod("get" + attributes[i]) + "/";
             }
             //save the tag info
             File file = new File(mf.getPath());
