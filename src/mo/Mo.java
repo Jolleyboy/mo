@@ -1,20 +1,8 @@
 package mo;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Iterator;
-import java.util.logging.Level;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -32,7 +20,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Separator;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -239,7 +226,7 @@ public class Mo extends Application {
                 
                 Stage stage3 = new Stage();
                 stage3.setTitle("Resolve Duplicate Matches");
-                Scene scene3 = new Scene(new VBox(), 650, 150);
+                Scene scene3 = new Scene(new VBox(), 650, 275);
                 stage3.setScene(scene3);
                 stage3.show();
                 
@@ -272,13 +259,27 @@ public class Mo extends Application {
                 });
                 apply.setAlignment(Pos.CENTER);
                 
+                VBox VtBox = new VBox(10);
+                VBox VaBox = new VBox(10);
+                VBox ValBox = new VBox(10);
+                
+                Label LtBox = new Label("Title");
+                Label LaBox = new Label("Artist");
+                Label LalBox = new Label("Album");
+                
+                VtBox.getChildren().addAll(LtBox,tBox);
+                VaBox.getChildren().addAll(LaBox,aBox);
+                ValBox.getChildren().addAll(LalBox,alBox);
+                
                 hb1.setAlignment(Pos.CENTER);
-                hb1.getChildren().addAll(tBox, aBox, alBox);
+                hb1.getChildren().addAll(VtBox, VaBox, ValBox);
                 hb2.setAlignment(Pos.CENTER);
                 hb2.getChildren().addAll(info);
                 hb3.setAlignment(Pos.CENTER);
                 hb3.getChildren().addAll(apply);
-                vb1.setPadding(new Insets(40, 10, 10, 10));
+                vb1.setPadding(new Insets(10, 10, 10, 10));
+                hb2.setPadding(new Insets(0,  10, 50, 10));
+                hb3.setPadding(new Insets(50, 10, 10, 10));
                 vb1.getChildren().addAll(hb2, hb1, hb3);
                 
                 scene3.setRoot(vb1);

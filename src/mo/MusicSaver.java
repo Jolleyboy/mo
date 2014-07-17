@@ -8,8 +8,6 @@ package mo;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -32,6 +30,8 @@ public class MusicSaver {
      */
     public void changeFilename(String[] attributes) {
         ObservableList<MusicFile> ol = Model.getInstance().getList();
+        
+//loop through each mf in the list
         for (MusicFile mf :  ol) {
             String name = "";
             //add each attribute to the name of the file
@@ -66,9 +66,9 @@ public class MusicSaver {
             File file = new File(mf.getPath());
             AudioFile af;
             try {
-                af = AudioFileIO.read(file);
-                af.setTag(mf.getTag()); //write the tag we've been working with
-                af.commit(); //commit writes the tag to the actual file
+                af = AudioFileIO.read(file); //create the AudioFile
+                af.setTag(mf.getTag()); //give the tag we've altered to the af
+                af.commit(); //commit writes the altered tag to hard drive
             } catch (CannotReadException | IOException | TagException |
                      ReadOnlyFileException | InvalidAudioFrameException |
                      CannotWriteException ex) {
