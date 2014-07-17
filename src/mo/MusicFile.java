@@ -328,10 +328,16 @@ public class MusicFile {
         return tag;
     }
     
+    /**
+     * callMethod
+     * Call any getter method in this class dynamically with the name of method as a string
+     * @param methodName
+     * @return 
+     */
     public String callMethod(String methodName) {
     try {
-        Method  method = this.getClass().getDeclaredMethod (methodName, null);
-        return method.invoke (this,null).toString();
+        Method  method = this.getClass().getDeclaredMethod(methodName, null);
+        return (String) method.invoke(this,null);
     } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
         java.util.logging.Logger.getLogger(MusicFile.class.getName()).log(Level.SEVERE, null, ex);
     }
