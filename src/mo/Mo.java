@@ -11,6 +11,8 @@ import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,10 +31,12 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -49,13 +53,11 @@ public class Mo extends Application {
     
     private final TableView<MusicFile> table;
     private final Model model = Model.getInstance();
+    private ObservableList<MusicFile> data = model.getList();
     private MusicCollector mc;
     private MusicIdentifier mi;
-    private MusicFile mf;
     private Logger logger = LoggerFactory.getLogger(Mo.class);
 
-    private ObservableList<MusicFile> data = model.getList();
-    
     public Mo() { 
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
@@ -81,7 +83,6 @@ public class Mo extends Application {
                     try {
                         mc.searchComp(selectedDirectory.getPath() + "\\");
                     } catch (NullPointerException npe) {
-                        npe.printStackTrace();
                         System.out.println("ERROR: Null Pointer Exception");
                     }
                     updateTable();
@@ -338,6 +339,64 @@ public class Mo extends Application {
         stage2.show();  
     };
     
+    public void saveFiles(){
+        System.out.println("saving files");
+        Stage stage4 = new Stage();
+                stage4.setTitle("Save Files");
+                Scene scene4 = new Scene(new VBox(), 650, 550);
+                stage4.setScene(scene4);
+                stage4.show();
+                VBox vb = new VBox(10);
+                VBox vb1 = new VBox(10);
+                HBox hb1 = new HBox();
+                HBox hb = new HBox();
+                HBox hbB = new HBox();
+                Label lbl = new Label();
+                Label lbl1 = new Label();
+                TextField lbl2 = new TextField ();
+                Separator sep1 = new Separator();
+                lbl2.setPrefWidth(350);
+                lbl1.setText("Save files to: ");
+                lbl.setText("Save Location");
+                
+                Button btn1 = new Button();
+                btn1.setText("Select Directory");
+                btn1.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        final DirectoryChooser directoryChooser = new DirectoryChooser();
+                        File selectedDirectory = directoryChooser.showDialog(stage4);
+                        if (selectedDirectory != null) {
+                            try {
+                                lbl2.setText(selectedDirectory.toString());
+                            } catch (NullPointerException npe) {
+                                System.out.println("ERROR: Null Pointer Exception");
+                            }
+                        }       
+                    }
+                });
+                hbB.setAlignment(Pos.BOTTOM_RIGHT);
+                hb.getChildren().addAll(lbl);
+                hb.setAlignment(Pos.CENTER);
+                hbB.getChildren().addAll(btn1);
+                hb1.getChildren().addAll(lbl1, lbl2);
+                vb1.setPadding(new Insets(10, 10, 10, 10));
+                vb1.getChildren().addAll(hb, hb1, hbB, sep1);
+                
+                VBox vb2 = new VBox(10);
+                HBox hb2 = new HBox();
+                hb2.setAlignment(Pos.CENTER);
+                Label lbl3 = new Label();
+                hb2.getChildren().addAll(lbl3);
+                lbl3.setText("File Name");
+                vb2.getChildren().addAll(hb2);
+                
+                vb.getChildren().addAll(vb1, vb2);
+                scene4.setRoot(vb);
+                scene4.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
+                stage4.show();
+    }
+    
     public void updateTable() {
         table.getItems().clear();
         table.setItems(FXCollections.observableArrayList(data));
@@ -418,7 +477,7 @@ public class Mo extends Application {
         btn4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                //saveFile
+                saveFiles();
             }
         });
         
