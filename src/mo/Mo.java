@@ -3,6 +3,13 @@ package mo;
 import java.io.File;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -12,11 +19,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -30,14 +40,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -346,12 +360,7 @@ public class Mo extends Application {
         stage2.show();  
     };
     
-    public void changesMade() {
-        
-    }
-    
     public void saveFiles() {
-        System.out.println("saving files");
         Stage stage4 = new Stage();
         stage4.setTitle("Save Files");
         Scene scene4 = new Scene(new VBox(), 650, 550);
@@ -408,10 +417,8 @@ public class Mo extends Application {
         RadioButton rb1 = new RadioButton("One");
         rb1.setToggleGroup(group);
         rb1.setSelected(true);
-
         RadioButton rb2 = new RadioButton("Two");
         rb2.setToggleGroup(group);
-
         RadioButton rb3 = new RadioButton("Three");
         rb3.setToggleGroup(group);
 
@@ -419,20 +426,13 @@ public class Mo extends Application {
         rb2.setUserData(2);
         rb3.setUserData(3);
 
-        ChoiceBox first = new ChoiceBox(FXCollections.observableArrayList(
-                "", "Title", "Artist", "Album")
-        );
-        ChoiceBox second = new ChoiceBox(FXCollections.observableArrayList(
-                "", "Title", "Artist", "Album")
-        );
-        ChoiceBox third = new ChoiceBox(FXCollections.observableArrayList(
-                "", "Title", "Artist", "Album")
-        );
+        ComboBox first = new ComboBox(FXCollections.observableArrayList("", "Title", "Artist", "Album"));
+        ComboBox second = new ComboBox(FXCollections.observableArrayList("", "Title", "Artist", "Album"));
+        ComboBox third = new ComboBox(FXCollections.observableArrayList("", "Title", "Artist", "Album"));
 
-        first.getSelectionModel().selectFirst();
-        second.getSelectionModel().selectFirst();
-        third.getSelectionModel().selectFirst();
-
+        first.getSelectionModel().select(1);
+        second.setValue("");
+        third.setValue("");
         Label dash = new Label();
         dash.setText(" - ");
         Label dash2 = new Label();
@@ -455,7 +455,7 @@ public class Mo extends Application {
         att.setPadding(new Insets(10, 0, 0, 0));
         choice.getChildren().addAll(att, rb1, rb2, rb3);
         selectName.getChildren().addAll(first, ext, sep2);
-        choice.setPadding(new Insets(0, 40, 0, 10));
+        choice.setPadding(new Insets(0, 80, 0, 10));
 
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -467,6 +467,7 @@ public class Mo extends Application {
                     if (null != value) {
                         switch (value) {
                             case "1":
+                                first.getSelectionModel().select(1);
                                 second.setValue("");
                                 second.getSelectionModel().selectFirst();
                                 third.setValue("");
@@ -474,11 +475,13 @@ public class Mo extends Application {
                                 selectName.getChildren().addAll(first, ext);
                                 break;
                             case "2":
+                                second.getSelectionModel().select(2);
                                 third.setValue("");
                                 third.getSelectionModel().selectFirst();
                                 selectName.getChildren().addAll(first, dash, second, ext);
                                 break;
                             case "3":
+                                third.getSelectionModel().select(3);
                                 selectName.getChildren().addAll(first, dash, second, dash2, third, ext);
                                 break;
                         }
@@ -487,39 +490,7 @@ public class Mo extends Application {
             }
         });
 
-        String f = first.getValue().toString();
-        String s = second.getValue().toString();
-        String t = third.getValue().toString();
-        
-        first.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue ov, Number value, Number new_value) {
-                System.out.println("NEW: " + new_value);
-                wait.setText("");
-                
-                /*
-                *   first only needs check for empty
-                *   second checks with first only
-                *   third check with second and first
-                */
-            }
-        });
-
-        second.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue ov, Number value, Number new_value) {
-
-            }
-        });
-
-        third.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue ov, Number value, Number new_value) {
-
-            }
-        });
-
-        warn.getChildren().addAll(wait);
+        //warn.getChildren().addAll(wait);
         warn.setAlignment(Pos.CENTER);
         lSel.getChildren().addAll(choice);
         rSel.getChildren().addAll(selectName);
@@ -528,14 +499,45 @@ public class Mo extends Application {
         lSel.setId("lSel");
         rSel.setAlignment(Pos.CENTER);
         rSel.setPrefWidth(350);
-        vb2.setPadding(new Insets(10, 10, 10, 10));
+        vb2.setPadding(new Insets(10, 10, 0, 10));
         choiceh.setPadding(new Insets(10, 10, 20, 10));
         choiceh.getChildren().addAll(lSel, rSel);
         vb2.getChildren().addAll(hb2, choiceh, warn, sep2);
         //-------------end of vb2---------------------//
 
+        Image rootIcon = new Image(
+            getClass().getResourceAsStream("Style/icon4.png"));
+        Image subIcon = new Image(
+            getClass().getResourceAsStream("Style/icon4.png"));
+        Image fileIcon = new Image(
+            getClass().getResourceAsStream("Style/icon6.png"));
+        
         VBox vb3 = new VBox();
-
+        VBox headvb3 = new VBox();
+        Label head = new Label(" Music Folder Layout");
+        TreeItem<String> rootItem;
+        
+        rootItem = new TreeItem<>("Artist", new ImageView(rootIcon));
+        rootItem.setExpanded(true);
+        TreeItem<String> subRoot1;
+        TreeItem<String> subRoot2;
+        subRoot1 = new TreeItem<>("Album1", new ImageView(subIcon));
+        subRoot2 = new TreeItem<>("Album2", new ImageView(subIcon));
+        subRoot2.setExpanded(true);
+        rootItem.getChildren().addAll(subRoot1, subRoot2);
+        TreeItem<String> item1;
+        TreeItem<String> item2;
+        TreeItem<String> item3;
+        TreeItem<String> item4;
+        item1 = new TreeItem<>("MusicFile1.mp3", new ImageView(fileIcon));
+        item2 = new TreeItem<>("MusicFile2.mp3", new ImageView(fileIcon));
+        item3 = new TreeItem<>("MusicFile1.mp3", new ImageView(fileIcon));
+        item4 = new TreeItem<>("MusicFile2.mp3", new ImageView(fileIcon));
+        subRoot1.getChildren().addAll(item1, item2);
+        subRoot2.getChildren().addAll(item3, item4);
+ 
+        TreeView<String> tree = new TreeView<>(rootItem);
+        
         Button saveAll = new Button();
         saveAll.setText("Print file save example");
         saveAll.setOnAction(new EventHandler<ActionEvent>() {
@@ -545,15 +547,13 @@ public class Mo extends Application {
                 System.out.println(first.getValue() + " "
                         + second.getValue() + " "
                         + third.getValue() + ".mp3");
-                String num = group.getSelectedToggle().getUserData().toString();
-                String f = first.getValue().toString();
-                String s = second.getValue().toString();
-                String t = third.getValue().toString();
             }
         });
-
+        headvb3.getChildren().addAll(head);
+        headvb3.setAlignment(Pos.CENTER);
         vb3.setAlignment(Pos.BOTTOM_RIGHT);
-        vb3.getChildren().addAll(saveAll);
+        tree.prefWidth(200);
+        vb3.getChildren().addAll(headvb3, tree, saveAll);
         vb3.setPadding(new Insets(10, 10, 10, 10));
         vb.getChildren().addAll(vb1, vb2, vb3);
         scene4.setRoot(vb);
