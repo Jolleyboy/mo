@@ -60,7 +60,7 @@ public class MusicSaver {
         for (MusicFile mf : ol) {
             name = "";
             for (int i = 0; i < attributes.length; i++) {
-                name += mf.callMethod("get" + attributes[i]) + "/";
+                name += mf.callMethod("get" + attributes[i]) + "\\";
             }
             //save the tag info
             File file = new File(mf.getPath());
