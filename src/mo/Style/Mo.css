@@ -5,6 +5,7 @@
 .label {
     -fx-font-size: 14px;
     -fx-text-fill: #FAFAFA;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
 .button {
@@ -115,7 +116,6 @@
 }
 
 .context-menu {
-    //-fx-background-image: url("bg1.jpg");
     -fx-background-color:#333333;
 }
 
@@ -139,4 +139,53 @@
     -fx-padding: 0px 0px 0px 0px;
     -fx-font-size: 9pt;
     -fx-highlight-fill:#006699;
+}
+
+.choice-box { 
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 1;
+    -fx-background-color: #1d1d1d;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 10pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-pref-width: 75;
+}
+
+.choice-box .arrow {
+    -fx-background-color: #0066cc;
+}
+
+.radio-button {
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 9pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-border-width: 0px;
+}
+
+.radio-button .radio{
+    -fx-background-color: #333333;
+}
+
+.radio-button .radio:selected{
+    -fx-background-color: #0066cc;
+}
+
+.radio-button .dot {
+   -fx-background-color: #333333;
+   -fx-background-insets: 0;
+   -fx-background-radius: 1.0em; 
+   -fx-padding: 0.25em; 
+}
+
+.radio-button:selected .dot {
+    -fx-background-color:#3399ff;
+    -fx-background-insets: 0 0 -1 0, 0;
+}
+
+#lSel {
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 10pt;
+    -fx-text-fill: #d8d8d8;
 }
