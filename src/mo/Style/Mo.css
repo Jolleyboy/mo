@@ -141,17 +141,35 @@
     -fx-highlight-fill:#006699;
 }
 
-.choice-box { 
+.combo-box-base { 
     -fx-border-color: #e2e2e2;
     -fx-border-width: 1;
     -fx-background-color: #1d1d1d;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 10pt;
-    -fx-text-fill: #d8d8d8;
-    -fx-pref-width: 75;
+    -fx-font-color: white;
+    -fx-text-fill: white;
+    -fx-pref-width: 90;
 }
 
-.choice-box .arrow {
+.combo-box .list-cell {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #006699;
+    -fx-text-fill: white;
+}
+
+.combo-box .text { 
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 10pt;
+    -fx-font-color: white;
+    -fx-text-fill: white;
+}
+
+.combo-box .arrow {
     -fx-background-color: #0066cc;
 }
 
@@ -180,6 +198,18 @@
 .radio-button:selected .dot {
     -fx-background-color:#3399ff;
     -fx-background-insets: 0 0 -1 0, 0;
+}
+
+.tree-view .tree-cell{
+    -fx-background-color: #333333;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-text-fill: #d8d8d8;
+}
+
+.tree-cell .tree-disclosure-node .arrow {
+    -fx-background-color: #0066cc;
+    -fx-padding: 0.333333em; /* 4 */
+    -fx-shape: "M 0 -4 L 8 0 L 0 4 z";
 }
 
 #lSel {
