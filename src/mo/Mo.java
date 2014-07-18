@@ -3,6 +3,8 @@ package mo;
 import java.io.File;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -12,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -19,11 +22,14 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -340,62 +346,219 @@ public class Mo extends Application {
         stage2.show();  
     };
     
-    public void saveFiles(){
+    public void changesMade() {
+        
+    }
+    
+    public void saveFiles() {
         System.out.println("saving files");
         Stage stage4 = new Stage();
-                stage4.setTitle("Save Files");
-                Scene scene4 = new Scene(new VBox(), 650, 550);
-                stage4.setScene(scene4);
-                stage4.show();
-                VBox vb = new VBox(10);
-                VBox vb1 = new VBox(10);
-                HBox hb1 = new HBox();
-                HBox hb = new HBox();
-                HBox hbB = new HBox();
-                Label lbl = new Label();
-                Label lbl1 = new Label();
-                TextField lbl2 = new TextField ();
-                Separator sep1 = new Separator();
-                lbl2.setPrefWidth(350);
-                lbl1.setText("Save files to: ");
-                lbl.setText("Save Location");
-                
-                Button btn1 = new Button();
-                btn1.setText("Select Directory");
-                btn1.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        final DirectoryChooser directoryChooser = new DirectoryChooser();
-                        File selectedDirectory = directoryChooser.showDialog(stage4);
-                        if (selectedDirectory != null) {
-                            try {
-                                lbl2.setText(selectedDirectory.toString());
-                            } catch (NullPointerException npe) {
-                                System.out.println("ERROR: Null Pointer Exception");
-                            }
-                        }       
+        stage4.setTitle("Save Files");
+        Scene scene4 = new Scene(new VBox(), 650, 550);
+        stage4.setScene(scene4);
+        stage4.show();
+        VBox vb = new VBox(10);
+        VBox vb1 = new VBox(10);
+        HBox hb1 = new HBox();
+        HBox hb = new HBox();
+        HBox hbB = new HBox();
+        Label lbl = new Label();
+        Label lbl1 = new Label();
+        TextField lbl2 = new TextField();
+        Separator sep1 = new Separator();
+        lbl2.setPrefWidth(350);
+        lbl1.setText("Save files to: ");
+        lbl.setText("Save Location");
+
+        Button btn1 = new Button();
+        btn1.setText("Select Directory");
+        btn1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                final DirectoryChooser directoryChooser = new DirectoryChooser();
+                File selectedDirectory = directoryChooser.showDialog(stage4);
+                if (selectedDirectory != null) {
+                    try {
+                        lbl2.setText(selectedDirectory.toString());
+                    } catch (NullPointerException npe) {
+                        System.out.println("ERROR: Null Pointer Exception");
                     }
-                });
-                hbB.setAlignment(Pos.BOTTOM_RIGHT);
-                hb.getChildren().addAll(lbl);
-                hb.setAlignment(Pos.CENTER);
-                hbB.getChildren().addAll(btn1);
-                hb1.getChildren().addAll(lbl1, lbl2);
-                vb1.setPadding(new Insets(10, 10, 10, 10));
-                vb1.getChildren().addAll(hb, hb1, hbB, sep1);
+                }
+            }
+        });
+
+        hbB.setAlignment(Pos.BOTTOM_RIGHT);
+        hb.getChildren().addAll(lbl);
+        hb.setAlignment(Pos.CENTER);
+        hbB.getChildren().addAll(btn1);
+        hb1.getChildren().addAll(lbl1, lbl2);
+        vb1.setPadding(new Insets(10, 10, 10, 10));
+        vb1.getChildren().addAll(hb, hb1, hbB, sep1);
+
+        VBox vb2 = new VBox(10);
+        HBox hb2 = new HBox();
+        hb2.setAlignment(Pos.CENTER);
+        Label lbl3 = new Label();
+        hb2.getChildren().addAll(lbl3);
+        lbl3.setText("File Name Structure");
+        HBox selectName = new HBox();
+
+        final ToggleGroup group = new ToggleGroup();
+
+        RadioButton rb1 = new RadioButton("One");
+        rb1.setToggleGroup(group);
+        rb1.setSelected(true);
+
+        RadioButton rb2 = new RadioButton("Two");
+        rb2.setToggleGroup(group);
+
+        RadioButton rb3 = new RadioButton("Three");
+        rb3.setToggleGroup(group);
+
+        rb1.setUserData(1);
+        rb2.setUserData(2);
+        rb3.setUserData(3);
+
+        ChoiceBox first = new ChoiceBox(FXCollections.observableArrayList(
+                "", "Title", "Artist", "Album")
+        );
+        ChoiceBox second = new ChoiceBox(FXCollections.observableArrayList(
+                "", "Title", "Artist", "Album")
+        );
+        ChoiceBox third = new ChoiceBox(FXCollections.observableArrayList(
+                "", "Title", "Artist", "Album")
+        );
+
+        first.getSelectionModel().selectFirst();
+        second.getSelectionModel().selectFirst();
+        third.getSelectionModel().selectFirst();
+
+        Label dash = new Label();
+        dash.setText(" - ");
+        Label dash2 = new Label();
+        dash2.setText(" - ");
+        Label ext = new Label();
+        ext.setText(" .mp3 ");
+        Separator sep2 = new Separator();
+
+        VBox choice = new VBox(10);
+        VBox warn = new VBox(10);
+        HBox choiceh = new HBox(20);
+        HBox rSel = new HBox();
+        HBox lSel = new HBox();
+        Label wait = new Label();
+        wait.setText("");
+        wait.setStyle("-fx-text-fill: #66ccff;");
+        Label att = new Label();
+        att.setText(" Preferred Attributes ");
+        rb3.setPadding(new Insets(0, 0, 10, 0));
+        att.setPadding(new Insets(10, 0, 0, 0));
+        choice.getChildren().addAll(att, rb1, rb2, rb3);
+        selectName.getChildren().addAll(first, ext, sep2);
+        choice.setPadding(new Insets(0, 40, 0, 10));
+
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> ov,
+                    Toggle old_toggle, Toggle new_toggle) {
+                if (group.getSelectedToggle() != null) {
+                    String value = group.getSelectedToggle().getUserData().toString();
+                    selectName.getChildren().clear();
+                    if (null != value) {
+                        switch (value) {
+                            case "1":
+                                second.setValue("");
+                                second.getSelectionModel().selectFirst();
+                                third.setValue("");
+                                third.getSelectionModel().selectFirst();
+                                selectName.getChildren().addAll(first, ext);
+                                break;
+                            case "2":
+                                third.setValue("");
+                                third.getSelectionModel().selectFirst();
+                                selectName.getChildren().addAll(first, dash, second, ext);
+                                break;
+                            case "3":
+                                selectName.getChildren().addAll(first, dash, second, dash2, third, ext);
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+
+        String f = first.getValue().toString();
+        String s = second.getValue().toString();
+        String t = third.getValue().toString();
+        
+        first.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue ov, Number value, Number new_value) {
+                System.out.println("NEW: " + new_value);
+                wait.setText("");
                 
-                VBox vb2 = new VBox(10);
-                HBox hb2 = new HBox();
-                hb2.setAlignment(Pos.CENTER);
-                Label lbl3 = new Label();
-                hb2.getChildren().addAll(lbl3);
-                lbl3.setText("File Name");
-                vb2.getChildren().addAll(hb2);
-                
-                vb.getChildren().addAll(vb1, vb2);
-                scene4.setRoot(vb);
-                scene4.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
-                stage4.show();
+                /*
+                *   first only needs check for empty
+                *   second checks with first only
+                *   third check with second and first
+                */
+            }
+        });
+
+        second.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue ov, Number value, Number new_value) {
+
+            }
+        });
+
+        third.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue ov, Number value, Number new_value) {
+
+            }
+        });
+
+        warn.getChildren().addAll(wait);
+        warn.setAlignment(Pos.CENTER);
+        lSel.getChildren().addAll(choice);
+        rSel.getChildren().addAll(selectName);
+        selectName.setAlignment(Pos.CENTER);
+        lSel.setAlignment(Pos.CENTER_LEFT);
+        lSel.setId("lSel");
+        rSel.setAlignment(Pos.CENTER);
+        rSel.setPrefWidth(350);
+        vb2.setPadding(new Insets(10, 10, 10, 10));
+        choiceh.setPadding(new Insets(10, 10, 20, 10));
+        choiceh.getChildren().addAll(lSel, rSel);
+        vb2.getChildren().addAll(hb2, choiceh, warn, sep2);
+        //-------------end of vb2---------------------//
+
+        VBox vb3 = new VBox();
+
+        Button saveAll = new Button();
+        saveAll.setText("Print file save example");
+        saveAll.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("--------------------------");
+                System.out.println(first.getValue() + " "
+                        + second.getValue() + " "
+                        + third.getValue() + ".mp3");
+                String num = group.getSelectedToggle().getUserData().toString();
+                String f = first.getValue().toString();
+                String s = second.getValue().toString();
+                String t = third.getValue().toString();
+            }
+        });
+
+        vb3.setAlignment(Pos.BOTTOM_RIGHT);
+        vb3.getChildren().addAll(saveAll);
+        vb3.setPadding(new Insets(10, 10, 10, 10));
+        vb.getChildren().addAll(vb1, vb2, vb3);
+        scene4.setRoot(vb);
+        scene4.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
+        stage4.show();
     }
     
     public void updateTable() {
