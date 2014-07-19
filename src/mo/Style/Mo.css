@@ -149,7 +149,6 @@
     -fx-font-size: 10pt;
     -fx-font-color: white;
     -fx-text-fill: white;
-    -fx-pref-width: 90;
 }
 
 .combo-box .list-cell {
@@ -210,6 +209,10 @@
     -fx-background-color: #0066cc;
     -fx-padding: 0.333333em; /* 4 */
     -fx-shape: "M 0 -4 L 8 0 L 0 4 z";
+}
+
+.progress-indicator .percentage{
+    -fx-fill: #d8d8d8;
 }
 
 #lSel {
