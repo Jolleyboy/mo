@@ -4,12 +4,6 @@ import java.io.File;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -49,6 +43,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -263,7 +258,9 @@ public class Mo extends Application {
                 ComboBox tBox = new ComboBox(FXCollections.observableList(mf.record.titles));
                 ComboBox aBox = new ComboBox(FXCollections.observableList(mf.record.artists));
                 ComboBox alBox = new ComboBox(FXCollections.observableList(mf.record.albums));
-               
+                tBox.prefWidth(90);
+                aBox.prefWidth(90);
+                alBox.prefWidth(90);
                 Button apply = new Button();
                 apply.setText("Apply Changes");
                 apply.setOnAction(new EventHandler<ActionEvent>() {
@@ -310,12 +307,12 @@ public class Mo extends Application {
     }
     
     public void id(){
-        
+        Label label = new Label();
         Task task;
         task = new Task<Void>() {
             @Override public Void call() {
+                data = model.getList();
                 mi.identifyNewSongs();
-                data = model.getList(); 
                 updateProgress(1,1);
                 return null;
             }
@@ -336,8 +333,8 @@ public class Mo extends Application {
          
         final VBox vb = new VBox();
         final HBox btnbox2 = new HBox(20);
-        Label label = new Label();
-        label.setText("Identifying...");
+        
+        label.setText("Identifying " + data.size() + " files... ");
         vb.setSpacing(10);
         vb.setPadding(new Insets(40, 10, 10, 10));
         
@@ -350,11 +347,12 @@ public class Mo extends Application {
         final HBox hb = new HBox();
         hb.setSpacing(5);
         hb.setAlignment(Pos.CENTER);
-        hb.getChildren().addAll(label, bar, pi);
+        hb.getChildren().addAll(bar);
         btnbox2.getChildren().add(btn4);
         btnbox2.setAlignment(Pos.CENTER);
         btnbox2.setPadding(new Insets(10, 10, 10, 10));
-        vb.getChildren().addAll(hb, btnbox2);
+        vb.setAlignment(Pos.CENTER);
+        vb.getChildren().addAll(label, hb, pi, btnbox2);
         scene2.setRoot(vb);
         scene2.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
         stage2.show();  
@@ -363,7 +361,7 @@ public class Mo extends Application {
     public void saveFiles() {
         Stage stage4 = new Stage();
         stage4.setTitle("Save Files");
-        Scene scene4 = new Scene(new VBox(), 650, 550);
+        Scene scene4 = new Scene(new VBox(), 650, 625);
         stage4.setScene(scene4);
         stage4.show();
         VBox vb = new VBox(10);
@@ -396,13 +394,15 @@ public class Mo extends Application {
             }
         });
 
-        hbB.setAlignment(Pos.BOTTOM_RIGHT);
         hb.getChildren().addAll(lbl);
         hb.setAlignment(Pos.CENTER);
         hbB.getChildren().addAll(btn1);
-        hb1.getChildren().addAll(lbl1, lbl2);
+        hbB.setAlignment(Pos.CENTER_RIGHT);
+        hbB.setPadding(new Insets(10, 10, 10, 40));
+        hb1.getChildren().addAll(lbl1, lbl2, hbB);
+        hb1.setAlignment(Pos.CENTER_LEFT);
         vb1.setPadding(new Insets(10, 10, 10, 10));
-        vb1.getChildren().addAll(hb, hb1, hbB, sep1);
+        vb1.getChildren().addAll(hb, hb1, sep1);
 
         VBox vb2 = new VBox(10);
         HBox hb2 = new HBox();
@@ -416,12 +416,11 @@ public class Mo extends Application {
 
         RadioButton rb1 = new RadioButton("One");
         rb1.setToggleGroup(group);
-        rb1.setSelected(true);
         RadioButton rb2 = new RadioButton("Two");
         rb2.setToggleGroup(group);
         RadioButton rb3 = new RadioButton("Three");
         rb3.setToggleGroup(group);
-
+        
         rb1.setUserData(1);
         rb2.setUserData(2);
         rb3.setUserData(3);
@@ -481,6 +480,7 @@ public class Mo extends Application {
                                 selectName.getChildren().addAll(first, dash, second, ext);
                                 break;
                             case "3":
+                                second.getSelectionModel().select(2);
                                 third.getSelectionModel().select(3);
                                 selectName.getChildren().addAll(first, dash, second, dash2, third, ext);
                                 break;
@@ -489,7 +489,7 @@ public class Mo extends Application {
                 }
             }
         });
-
+        rb3.setSelected(true);
         //warn.getChildren().addAll(wait);
         warn.setAlignment(Pos.CENTER);
         lSel.getChildren().addAll(choice);
@@ -499,8 +499,8 @@ public class Mo extends Application {
         lSel.setId("lSel");
         rSel.setAlignment(Pos.CENTER);
         rSel.setPrefWidth(350);
-        vb2.setPadding(new Insets(10, 10, 0, 10));
-        choiceh.setPadding(new Insets(10, 10, 20, 10));
+        vb2.setPadding(new Insets(0, 10, 0, 10));
+        choiceh.setPadding(new Insets(0, 10, 20, 10));
         choiceh.getChildren().addAll(lSel, rSel);
         vb2.getChildren().addAll(hb2, choiceh, warn, sep2);
         //-------------end of vb2---------------------//
@@ -512,34 +512,62 @@ public class Mo extends Application {
         Image fileIcon = new Image(
             getClass().getResourceAsStream("Style/icon6.png"));
         
-        VBox vb3 = new VBox();
+        VBox vb3 = new VBox(10);
         VBox headvb3 = new VBox();
         Label head = new Label(" Music Folder Layout");
-        TreeItem<String> rootItem;
         
-        rootItem = new TreeItem<>("Artist", new ImageView(rootIcon));
-        rootItem.setExpanded(true);
+        TreeItem<String> rootItem1;
+        TreeItem<String> rootItem2;
+        TreeItem<String> rootItem3;
+        
+        rootItem1 = new TreeItem<>("Artist", new ImageView(rootIcon));
+        rootItem2 = new TreeItem<>("Artist", new ImageView(rootIcon));
+        rootItem3 = new TreeItem<>("Songs", new ImageView(rootIcon));
+        
+        rootItem1.setExpanded(true);
+        rootItem2.setExpanded(true);
+        
         TreeItem<String> subRoot1;
         TreeItem<String> subRoot2;
         subRoot1 = new TreeItem<>("Album1", new ImageView(subIcon));
         subRoot2 = new TreeItem<>("Album2", new ImageView(subIcon));
         subRoot2.setExpanded(true);
-        rootItem.getChildren().addAll(subRoot1, subRoot2);
+        rootItem1.getChildren().addAll(subRoot1, subRoot2);
+        rootItem2.getChildren().addAll();
         TreeItem<String> item1;
         TreeItem<String> item2;
         TreeItem<String> item3;
         TreeItem<String> item4;
+        TreeItem<String> item11;
+        TreeItem<String> item22;
+        TreeItem<String> item33;
+        TreeItem<String> item44;
+        TreeItem<String> item111;
+        TreeItem<String> item222;
+        TreeItem<String> item333;
+        TreeItem<String> item444;
         item1 = new TreeItem<>("MusicFile1.mp3", new ImageView(fileIcon));
         item2 = new TreeItem<>("MusicFile2.mp3", new ImageView(fileIcon));
         item3 = new TreeItem<>("MusicFile1.mp3", new ImageView(fileIcon));
         item4 = new TreeItem<>("MusicFile2.mp3", new ImageView(fileIcon));
+        item11 = new TreeItem<>("MusicFile1.mp3", new ImageView(fileIcon));
+        item22 = new TreeItem<>("MusicFile2.mp3", new ImageView(fileIcon));
+        item33 = new TreeItem<>("MusicFile3.mp3", new ImageView(fileIcon));
+        item44 = new TreeItem<>("MusicFile4.mp3", new ImageView(fileIcon));
+        item111 = new TreeItem<>("MusicFile1.mp3", new ImageView(fileIcon));
+        item222 = new TreeItem<>("MusicFile2.mp3", new ImageView(fileIcon));
+        item333 = new TreeItem<>("MusicFile3.mp3", new ImageView(fileIcon));
+        item444 = new TreeItem<>("etc...", new ImageView(fileIcon));
         subRoot1.getChildren().addAll(item1, item2);
         subRoot2.getChildren().addAll(item3, item4);
- 
-        TreeView<String> tree = new TreeView<>(rootItem);
+        rootItem2.getChildren().addAll(item11, item22, item33, item44);
+        rootItem3.getChildren().addAll(item111, item222, item333, item444);
+        TreeView<String> tree1 = new TreeView<>(rootItem1);
+        TreeView<String> tree2 = new TreeView<>(rootItem2);
+        TreeView<String> tree3 = new TreeView<>(rootItem3);
         
         Button saveAll = new Button();
-        saveAll.setText("Print file save example");
+        saveAll.setText(" Save And Create Folders ");
         saveAll.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -549,11 +577,53 @@ public class Mo extends Application {
                         + third.getValue() + ".mp3");
             }
         });
+        
+        Button cancel = new Button();
+        cancel.setText("Cancel");
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage4.close();
+            }
+        });
+        
+        
+        HBox op1 = new HBox(10);
+        HBox op2 = new HBox(10);
+        HBox op3 = new HBox(10);
+        HBox ops = new HBox(30);
+        
+        VBox lb1 = new VBox(5);
+        Label one = new Label("Artist -> Album -> Files");
+        VBox lb2 = new VBox(5);
+        Label two = new Label("Artist -> Files");
+        VBox lb3 = new VBox(5);
+        Label three = new Label("Single Folder of Files");
+        
+        lb1.getChildren().addAll(one,tree1);
+        op1.getChildren().addAll(lb1);
+        op1.setAlignment(Pos.CENTER);
+        
+        lb2.getChildren().addAll(two, tree2);
+        op2.getChildren().addAll(lb2);
+        op2.setAlignment(Pos.CENTER);
+        
+        lb3.getChildren().addAll(three, tree3);
+        op3.getChildren().addAll(lb3);
+        op3.setAlignment(Pos.CENTER);
+        ComboBox fold = new ComboBox(FXCollections.observableArrayList(
+                "", "Artist -> Album -> Files", 
+                "Artist -> Files", 
+                "Single Folder of Files"));
+        ops.getChildren().addAll(op1, op2, op3);
+        ops.setPadding(new Insets(10, 10, 10, 10));
         headvb3.getChildren().addAll(head);
         headvb3.setAlignment(Pos.CENTER);
         vb3.setAlignment(Pos.BOTTOM_RIGHT);
-        tree.prefWidth(200);
-        vb3.getChildren().addAll(headvb3, tree, saveAll);
+        Separator sep4 = new Separator();
+        HBox bns = new HBox(345);
+        bns.getChildren().addAll(cancel, saveAll);
+        vb3.getChildren().addAll(headvb3, ops, fold, sep4, bns);
         vb3.setPadding(new Insets(10, 10, 10, 10));
         vb.getChildren().addAll(vb1, vb2, vb3);
         scene4.setRoot(vb);
@@ -568,8 +638,6 @@ public class Mo extends Application {
     
     public void resetTable() {
         //table.getItems().clear();
-        //data = null;
-        //table.setItems(FXCollections.observableArrayList(data));
     }
     
     @Override
@@ -591,7 +659,7 @@ public class Mo extends Application {
         
         VBox.setVgrow(table, Priority.ALWAYS);
         table.setPadding(new Insets(10, 10, 0, 10));
-        
+        table.setPlaceholder(new Text(""));
         final VBox btns = new VBox();
         final HBox btnbox = new HBox(20);
         btns.setSpacing(0);
