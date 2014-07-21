@@ -568,23 +568,6 @@ public class Mo extends Application {
         TreeView<String> tree2 = new TreeView<>(rootItem2);
         TreeView<String> tree3 = new TreeView<>(rootItem3);
         
-        Button saveAll = new Button();
-        saveAll.setText(" Save And Create Folders ");
-        saveAll.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("--------------------------");
-                String[] attributes = {(String) first.getValue(), (String) second.getValue(), (String) third.getValue()};                
-                MusicSaver sf = new MusicSaver();   
-                sf.changeFilename(attributes);
-                try {
-                    sf.saveFiles(attributes, saver);
-                } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(Mo.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        
         Button cancel = new Button();
         cancel.setText("Cancel");
         cancel.setOnAction(new EventHandler<ActionEvent>() {
@@ -594,6 +577,8 @@ public class Mo extends Application {
             }
         });
         
+        Button saveAll = new Button();
+        saveAll.setText(" Save And Create Folders ");
         
         HBox op1 = new HBox(10);
         HBox op2 = new HBox(10);
@@ -636,6 +621,24 @@ public class Mo extends Application {
         scene4.setRoot(vb);
         scene4.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
         stage4.show();
+        
+        saveAll.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("--------------------------");
+                String[] attributes = {(String) first.getValue(), (String) second.getValue(), (String) third.getValue()};                
+                MusicSaver sf = new MusicSaver();   
+                sf.changeFilename(attributes);
+                String temp = (String) fold.getValue();
+                String[] foldrs = temp.split(" -> ");
+                try {
+                    sf.saveFiles(foldrs, saver);
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(Mo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
     }
     
     public void updateTable() {
