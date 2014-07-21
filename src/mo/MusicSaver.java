@@ -62,7 +62,7 @@ public class MusicSaver {
         
         //loop through each music file in the model
         for (MusicFile mf : ol) {
-           // name = "";
+            name = "";
             for (int i = 0; i < attributes.length; i++) {
                 if (mf.callMethod("get" + attributes[i]) != null) {
                     name += mf.callMethod("get" + attributes[i]) + "\\";
