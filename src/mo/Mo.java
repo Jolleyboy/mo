@@ -572,9 +572,10 @@ public class Mo extends Application {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("--------------------------");
-                System.out.println(first.getValue() + " "
-                        + second.getValue() + " "
-                        + third.getValue() + ".mp3");
+                String[] attributes = {(String) first.getValue(), (String) second.getValue(), (String) third.getValue()};                
+                MusicSaver sf = new MusicSaver();
+                final DirectoryChooser directoryChooser = new DirectoryChooser();
+                sf.saveFiles(attributes, directoryChooser.showDialog(stage4));
             }
         });
         
