@@ -575,7 +575,8 @@ public class Mo extends Application {
             public void handle(ActionEvent event) {
                 System.out.println("--------------------------");
                 String[] attributes = {(String) first.getValue(), (String) second.getValue(), (String) third.getValue()};                
-                MusicSaver sf = new MusicSaver();                
+                MusicSaver sf = new MusicSaver();   
+                sf.changeFilename(attributes);
                 try {
                     sf.saveFiles(attributes, saver);
                 } catch (IOException ex) {
