@@ -41,7 +41,7 @@ public class MusicSaver {
                     name += " - ";
                 }
                 System.out.println(attributes[i] + name);
-                if(mf.callMethod(attributes[i]) == null){
+                if(mf.callMethod("get" + attributes[i]) == null){
                     name = name.substring(0, name.length() - 7);
                 }
             }
