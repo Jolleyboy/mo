@@ -1,6 +1,8 @@
 package mo;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
@@ -574,7 +576,11 @@ public class Mo extends Application {
                 System.out.println("--------------------------");
                 String[] attributes = {(String) first.getValue(), (String) second.getValue(), (String) third.getValue()};                
                 MusicSaver sf = new MusicSaver();                
-                sf.saveFiles(attributes, saver);
+                try {
+                    sf.saveFiles(attributes, saver);
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(Mo.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
