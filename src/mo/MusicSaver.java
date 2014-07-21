@@ -82,7 +82,7 @@ public class MusicSaver {
                 ex.printStackTrace();
             }
             //creates a new file in the approrpriate place
-            org.apache.commons.io.FileUtils.copyFile(file, new File(topDirectory.getAbsolutePath() + name + mf.getNewName()));
+            org.apache.commons.io.FileUtils.copyFile(file, new File(topDirectory.getAbsolutePath() + "\\" + name + mf.getNewName()));
         }
     }
 }
