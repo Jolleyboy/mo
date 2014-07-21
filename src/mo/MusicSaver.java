@@ -40,6 +40,7 @@ public class MusicSaver {
                 if (i != attributes.length - 1) {
                     name += " - ";
                 }
+                System.out.println(attributes[i] + name);
                 if(mf.callMethod(attributes[i]) == null){
                     name = name.substring(0, name.length() - 7);
                 }
@@ -61,11 +62,10 @@ public class MusicSaver {
         
         //loop through each music file in the model
         for (MusicFile mf : ol) {
-            name = "";
+           // name = "";
             for (int i = 0; i < attributes.length; i++) {
-                name += mf.callMethod("get" + attributes[i]) + "\\";
-                if(mf.callMethod(attributes[i]) == null){
-                    name = name.substring(0, name.length() - 5);
+                if (mf.callMethod("get" + attributes[i]) != null) {
+                    name += mf.callMethod("get" + attributes[i]) + "\\";
                 }
             }
             //save the tag info
