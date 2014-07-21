@@ -357,7 +357,7 @@ public class Mo extends Application {
         scene2.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
         stage2.show();  
     };
-    
+    File saver;
     public void saveFiles() {
         Stage stage4 = new Stage();
         stage4.setTitle("Save Files");
@@ -383,10 +383,10 @@ public class Mo extends Application {
             @Override
             public void handle(ActionEvent event) {
                 final DirectoryChooser directoryChooser = new DirectoryChooser();
-                File selectedDirectory = directoryChooser.showDialog(stage4);
-                if (selectedDirectory != null) {
+                saver = directoryChooser.showDialog(stage4);
+                if (saver != null) {
                     try {
-                        lbl2.setText(selectedDirectory.toString());
+                        lbl2.setText(saver.toString());
                     } catch (NullPointerException npe) {
                         System.out.println("ERROR: Null Pointer Exception");
                     }
@@ -573,9 +573,8 @@ public class Mo extends Application {
             public void handle(ActionEvent event) {
                 System.out.println("--------------------------");
                 String[] attributes = {(String) first.getValue(), (String) second.getValue(), (String) third.getValue()};                
-                MusicSaver sf = new MusicSaver();
-                final DirectoryChooser directoryChooser = new DirectoryChooser();
-                sf.saveFiles(attributes, directoryChooser.showDialog(stage4));
+                MusicSaver sf = new MusicSaver();                
+                sf.saveFiles(attributes, saver);
             }
         });
         
