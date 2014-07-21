@@ -40,6 +40,9 @@ public class MusicSaver {
                 if (i != attributes.length - 1) {
                     name += " - ";
                 }
+                if(mf.callMethod(attributes[i]) == null){
+                    name = name.substring(0, name.length() - 7);
+                }
             }
             mf.setNewName(name);
         }
@@ -61,6 +64,9 @@ public class MusicSaver {
             name = "";
             for (int i = 0; i < attributes.length; i++) {
                 name += mf.callMethod("get" + attributes[i]) + "\\";
+                if(mf.callMethod(attributes[i]) == null){
+                    name = name.substring(0, name.length() - 5);
+                }
             }
             //save the tag info
             File file = new File(mf.getPath());
