@@ -40,12 +40,12 @@ public class MusicSaver {
                 if (i != attributes.length - 1) {
                     name += " - ";
                 }
-                System.out.println(attributes[i] + name);
+                
                 if(mf.callMethod("get" + attributes[i]) == null){
                     name = name.substring(0, name.length() - 7);
                 }
             }
-            mf.setNewName(name);
+            mf.setNewName(name + "." + mf.getExt());
         }
         Model.getInstance().setList(ol);
     }
@@ -81,6 +81,8 @@ public class MusicSaver {
                 ex.getMessage();
                 ex.printStackTrace();
             }
+            
+            changeFilename(attributes);
             //creates a new file in the approrpriate place
             org.apache.commons.io.FileUtils.copyFile(file, new File(topDirectory.getAbsolutePath() + "\\" + name + mf.getNewName()));
         }
