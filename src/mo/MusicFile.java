@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import org.apache.commons.io.FilenameUtils;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
@@ -326,6 +327,14 @@ public class MusicFile {
      */
     public Tag getTag() {
         return tag;
+    }
+    
+    /**
+     * Getter for file extension
+     * @return 
+     */
+    public String getExt() {
+        return FilenameUtils.getExtension(getPath());
     }
     
     /**
