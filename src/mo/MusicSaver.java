@@ -54,7 +54,7 @@ public class MusicSaver {
      * @param attributes
      * @param topDirectory 
      */
-    public void saveFiles(String[] attributes, File topDirectory) {
+    public void saveFiles(String[] attributes, File topDirectory) throws IOException {
         Model model = Model.getInstance();
         ObservableList<MusicFile> ol = model.getList();
         String name = "";
@@ -82,7 +82,7 @@ public class MusicSaver {
                 ex.printStackTrace();
             }
             //creates a new file in the approrpriate place
-            file.renameTo(new File(topDirectory.getAbsolutePath() + name + mf.getNewName()));
+            org.apache.commons.io.FileUtils.copyFile(file, new File(topDirectory.getAbsolutePath() + name + mf.getNewName()));
         }
     }
 }
