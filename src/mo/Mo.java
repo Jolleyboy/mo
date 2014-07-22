@@ -70,6 +70,10 @@ public class Mo extends Application {
         mi = new MusicIdentifier();
     }
     
+    /**
+     * Initialize the Main GUI MenuBar.
+     * @author Matt
+     */
     public MenuBar initMenus(Stage stage){
         MenuBar menuBar = new MenuBar();
         
@@ -104,7 +108,7 @@ public class Mo extends Application {
  
         // --- Edit Menu
         Menu menuEdit = new Menu("Edit");
-        MenuItem identify = new MenuItem("Identify Music"); // -- 
+        MenuItem identify = new MenuItem("Identify Music"); // -- Identify Music Submenu
         identify.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -114,7 +118,7 @@ public class Mo extends Application {
             
         });
         
-        MenuItem rd = new MenuItem("Resolve Duplicates"); // -- 
+        MenuItem rd = new MenuItem("Resolve Duplicates"); // -- Resolve Duplicates Submenu
         rd.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -129,7 +133,7 @@ public class Mo extends Application {
  
         // --- View Menu
         Menu menuView = new Menu("View");
-        MenuItem update = new MenuItem("Update Library");
+        MenuItem update = new MenuItem("Apply Changes");
         update.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -137,17 +141,7 @@ public class Mo extends Application {
                 }
             
         });
-        
-        MenuItem reset = new MenuItem("Erase Library");
-        reset.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    resetTable();
-                }
-            
-        });
-        
-        menuView.getItems().addAll(update, reset);
+        menuView.getItems().addAll(update);
         // ---
         
         menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
@@ -155,6 +149,10 @@ public class Mo extends Application {
         return menuBar;
     };
     
+     /**
+     * Initialize the TableView that will display the library.
+     * @author Matt
+     */
     public void initTable(){
         // NAME COLUMN
         TableColumn nameCol = new TableColumn("Name");
@@ -232,6 +230,11 @@ public class Mo extends Application {
         table.getColumns().addAll(nameCol, timeCol, artistCol, albumCol, genreCol);
     };
     
+    /**
+     * Show Duplicate Items UI window and check for any 
+     * duplicate matches returned by MusicIdentifier.
+     * @author Matt
+     */
     public void resolveDuplicates(){
         for (MusicFile mf : data) {
             System.out.println("parsing through list");
@@ -252,19 +255,23 @@ public class Mo extends Application {
                 final HBox hb2 = new HBox(10);
                 final HBox hb3 = new HBox(10);
                 
+                //Original information label
                 Label info = new Label();
                 info.setText("Original Info:          "
                         + "" + mf.getTitle() + " - "
                         + mf.getArtist() + " - " 
                         + mf.getAlbum());
+                //Title selection box
                 ComboBox tBox = new ComboBox(FXCollections.observableList(mf.record.titles));
+                //Artist selection box
                 ComboBox aBox = new ComboBox(FXCollections.observableList(mf.record.artists));
+                //Album Selection box
                 ComboBox alBox = new ComboBox(FXCollections.observableList(mf.record.albums));
                 tBox.prefWidth(90);
                 aBox.prefWidth(90);
                 alBox.prefWidth(90);
                 Button apply = new Button();
-                apply.setText("Apply Changes");
+                apply.setText("Apply Changes"); // -- apply newly selected id3 info to musicfile
                 apply.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
@@ -291,6 +298,7 @@ public class Mo extends Application {
                 ValBox.getChildren().addAll(LalBox,alBox);
                 
                 hb1.setAlignment(Pos.CENTER);
+                // selection combo boxes for title, artist and album.
                 hb1.getChildren().addAll(VtBox, VaBox, ValBox);
                 hb2.setAlignment(Pos.CENTER);
                 hb2.getChildren().addAll(info);
@@ -308,9 +316,14 @@ public class Mo extends Application {
         }
     }
     
+    /**
+     * Identifying UI window with call to MusicIdentifier.
+     * @author Matt
+     */
     public void id(){
         Label label = new Label();
         Task task;
+        //start music identifying task
         task = new Task<Void>() {
             @Override public Void call() {
                 data = model.getList();
@@ -340,6 +353,7 @@ public class Mo extends Application {
         vb.setSpacing(10);
         vb.setPadding(new Insets(40, 10, 10, 10));
         
+        //Close window button
         Button btn4 = new Button();
         btn4.setText("Close");
         btn4.setOnAction((ActionEvent t) -> {    
@@ -349,17 +363,25 @@ public class Mo extends Application {
         final HBox hb = new HBox();
         hb.setSpacing(5);
         hb.setAlignment(Pos.CENTER);
+        // display laoding bar
         hb.getChildren().addAll(bar);
         btnbox2.getChildren().add(btn4);
         btnbox2.setAlignment(Pos.CENTER);
         btnbox2.setPadding(new Insets(10, 10, 10, 10));
         vb.setAlignment(Pos.CENTER);
+        // display close button amd progress indicator
         vb.getChildren().addAll(label, hb, pi, btnbox2);
         scene2.setRoot(vb);
         scene2.getStylesheets().add(Mo.class.getResource("Style/Mo.css").toExternalForm());
         stage2.show();  
     };
+    
     File saver;
+    
+    /**
+     * Show Save files window and call musicSaver.
+     * @author Matt
+     */
     public void saveFiles() {
         Stage stage4 = new Stage();
         stage4.setTitle("Save Files");
@@ -379,6 +401,7 @@ public class Mo extends Application {
         lbl1.setText("Save files to: ");
         lbl.setText("Save Location");
 
+        // Choose directory to save music
         Button btn1 = new Button();
         btn1.setText("Select Directory");
         btn1.setOnAction(new EventHandler<ActionEvent>() {
@@ -416,6 +439,7 @@ public class Mo extends Application {
 
         final ToggleGroup group = new ToggleGroup();
 
+        // radio button attribute selection
         RadioButton rb1 = new RadioButton("One");
         rb1.setToggleGroup(group);
         RadioButton rb2 = new RadioButton("Two");
@@ -458,6 +482,7 @@ public class Mo extends Application {
         selectName.getChildren().addAll(first, ext, sep2);
         choice.setPadding(new Insets(0, 80, 0, 10));
 
+        // selection of number of attributes changes to comboboxes
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> ov,
@@ -491,8 +516,8 @@ public class Mo extends Application {
                 }
             }
         });
+        
         rb3.setSelected(true);
-        //warn.getChildren().addAll(wait);
         warn.setAlignment(Pos.CENTER);
         lSel.getChildren().addAll(choice);
         rSel.getChildren().addAll(selectName);
@@ -570,6 +595,7 @@ public class Mo extends Application {
         
         Button cancel = new Button();
         cancel.setText("Cancel");
+        // close window
         cancel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -632,24 +658,31 @@ public class Mo extends Application {
                 String temp = (String) fold.getValue();
                 String[] foldrs = temp.split(" -> ");
                 try {
-                    sf.saveFiles(foldrs, saver);
+                    if (saver != null) {
+                        sf.saveFiles(foldrs, saver);
+                    } else {
+                        stage4.close();
+                    }
                 } catch (IOException ex) {
                     java.util.logging.Logger.getLogger(Mo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
-        
     }
     
+    /**
+     * Apply current music list to tableView.
+     * @author Matt
+     */
     public void updateTable() {
         table.getItems().clear();
         table.setItems(FXCollections.observableArrayList(data));
     }
     
-    public void resetTable() {
-        //table.getItems().clear();
-    }
-    
+    /**
+     * Start Main GUI with menuBar TableView and Buttons.
+     * @author Matt
+     */
     @Override
     public void start(Stage stage) {
         
@@ -665,7 +698,7 @@ public class Mo extends Application {
         MenuBar menuBar = initMenus(stage); //INITIALIZE MENUS
         
         initTable(); //INITIALIZE TABLE
-        updateTable();
+        updateTable(); // update table
         
         VBox.setVgrow(table, Priority.ALWAYS);
         table.setPadding(new Insets(10, 10, 0, 10));
@@ -676,7 +709,7 @@ public class Mo extends Application {
         btns.setPadding(new Insets(10, 10, 10, 10));
         
         Button btn1 = new Button();
-        btn1.setText("Add Folder to Library");
+        btn1.setText("Add Folder to Library"); // add foledr to library button
         btn1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -695,7 +728,7 @@ public class Mo extends Application {
         });
         
         Button btn3 = new Button();
-        btn3.setText("Identify Music Files");
+        btn3.setText("Identify Music Files"); // identify files button
         btn3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -705,7 +738,7 @@ public class Mo extends Application {
         });
         
         Button btn2 = new Button();
-        btn2.setText("Resolve Duplicates");
+        btn2.setText("Resolve Duplicates"); // resolve duplicate button
         btn2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
@@ -715,7 +748,7 @@ public class Mo extends Application {
         });
         
         Button btn4 = new Button();
-        btn4.setText("Save to Folders");
+        btn4.setText("Save to Folders"); // savce to folders button
         btn4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
