@@ -54,11 +54,7 @@ public class MusicIdentifier {
             
             //add the identified file to a new list
             newList.add(mf);
-            try {
-                Thread.sleep(350); //Only 3 requests per second
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MusicIdentifier.class.getName()).log(Level.SEVERE, null, ex);
-            }
+         
         }
         model.setList(newList);
     }

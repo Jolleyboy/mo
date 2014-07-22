@@ -2,8 +2,12 @@ package mo;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.logging.Level;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
@@ -49,6 +53,8 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javazoom.jlgui.basicplayer.BasicPlayer;
+import javazoom.jlgui.basicplayer.BasicPlayerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -270,6 +276,33 @@ public class Mo extends Application {
                 tBox.prefWidth(90);
                 aBox.prefWidth(90);
                 alBox.prefWidth(90);
+                
+                BasicPlayer player = new BasicPlayer();
+
+                Button play = new Button("Play");
+                play.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            player.open(new URL("file:///" + mf.getFile().getAbsolutePath()));
+                            player.play();
+                        } catch (BasicPlayerException | MalformedURLException ex) {
+                            java.util.logging.Logger.getLogger(Mo.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+                
+                Button stop = new Button("Stop");
+                stop.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            player.stop();
+                        } catch (BasicPlayerException ex) {
+                            java.util.logging.Logger.getLogger(Mo.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
                 Button apply = new Button();
                 apply.setText("Apply Changes"); // -- apply newly selected id3 info to musicfile
                 apply.setOnAction(new EventHandler<ActionEvent>() {
@@ -303,7 +336,7 @@ public class Mo extends Application {
                 hb2.setAlignment(Pos.CENTER);
                 hb2.getChildren().addAll(info);
                 hb3.setAlignment(Pos.CENTER);
-                hb3.getChildren().addAll(apply);
+                hb3.getChildren().addAll(play, stop, apply);
                 vb1.setPadding(new Insets(10, 10, 10, 10));
                 hb2.setPadding(new Insets(0,  10, 50, 10));
                 hb3.setPadding(new Insets(50, 10, 10, 10));

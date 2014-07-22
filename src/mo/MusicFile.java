@@ -36,7 +36,7 @@ public class MusicFile {
     Record record;                  // Where we store duplicate information
     boolean fDuplicates = false;    // Is ther eany duplicate information stored?
     private String newName;         //What we plan to change the name to
-    
+    private File file;
     /**
      * Constructor that takes an AudioFile
      * @param af 
@@ -45,7 +45,7 @@ public class MusicFile {
         tag = af.getTag();//get the tag
         header = af.getAudioHeader(); //get the header
         path = af.getFile().toPath(); //get the path to the file
-        
+        this.file = af.getFile();
         //Check if this file has already been identified or not
         if (tag.getFirst(FieldKey.CUSTOM1) == "identified") {
             fIdentified = true;
@@ -63,6 +63,7 @@ public class MusicFile {
             tag = af.getTag();//get the tag
             header = af.getAudioHeader(); //get the header
             path = af.getFile().toPath(); //get the path
+            this.file = af.getFile();
             duration = durationString(af); //set the duration
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             logger.error(ex.getMessage());
@@ -86,6 +87,7 @@ public class MusicFile {
             tag = af.getTag();//get the tag
             header = af.getAudioHeader();
             path = af.getFile().toPath();
+            this.file = af.getFile();
             duration = durationString(af);
         } catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
             logger.error(ex.getMessage());
@@ -336,6 +338,11 @@ public class MusicFile {
     public String getExt() {
         return FilenameUtils.getExtension(getPath());
     }
+    
+    public File getFile() {
+        return file;
+    }
+    
     
     /**
      * callMethod
