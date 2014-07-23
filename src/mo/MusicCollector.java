@@ -13,7 +13,10 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * This class is responsible of obtaining the files needed to make the
+ * program work.
+ */
 public class MusicCollector {
     private Logger logger = LoggerFactory.getLogger(MusicCollector.class);
     
@@ -87,7 +90,7 @@ public class MusicCollector {
     }
 
     
-    
+    //Unused method, has same function as searchComp
     public void findAndAddFiles(File path) {
         Collection<File> files = new ArrayList<File>();
         ObservableList ol = model.getList();
