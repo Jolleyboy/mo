@@ -1,4 +1,4 @@
 mo
 ==
 
-Music Organizer for Jordan Jensen
+"Music Organizer" - Update metadata and reorganize your music files.
